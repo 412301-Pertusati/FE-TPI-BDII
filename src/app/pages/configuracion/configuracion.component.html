@@ -1,0 +1,128 @@
+<div class="configuracion-container">
+  <div class="header">
+    <h1 class="title">Configuración</h1>
+  </div>
+
+  <div class="content">
+    <mat-card class="cuenta-card">
+      <mat-card-header class="card-header">
+        <mat-card-title class="section-title">
+          <mat-icon class="section-icon">person</mat-icon>
+          Información de cuenta
+        </mat-card-title>
+        <mat-card-subtitle class="section-subtitle">
+          Actualiza tu información personal
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="card-content">
+        <form [formGroup]="cuentaForm" (ngSubmit)="onGuardar()">
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Nombre</mat-label>
+              <input
+                matInput
+                formControlName="nombre"
+                placeholder="Ingresa tu nombre completo">
+              <mat-error *ngIf="cuentaForm.get('nombre')?.invalid && cuentaForm.get('nombre')?.touched">
+                {{ getErrorMessage('nombre') }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Email</mat-label>
+              <input
+                matInput
+                type="email"
+                formControlName="email"
+                placeholder="Ingresa tu email">
+              <mat-error *ngIf="cuentaForm.get('email')?.invalid && cuentaForm.get('email')?.touched">
+                {{ getErrorMessage('email') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="password-section">
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Contraseña actual</mat-label>
+              <input
+                matInput
+                [type]="hideCurrentPassword ? 'password' : 'text'"
+                formControlName="contrasenaActual"
+                placeholder="Ingresa tu contraseña actual">
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="hideCurrentPassword = !hideCurrentPassword"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hideCurrentPassword">
+                <mat-icon>{{hideCurrentPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+            </mat-form-field>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Nueva contraseña</mat-label>
+                <input
+                  matInput
+                  [type]="hideNewPassword ? 'password' : 'text'"
+                  formControlName="nuevaContrasena"
+                  placeholder="Ingresa nueva contraseña">
+                <button
+                  mat-icon-button
+                  matSuffix
+                  type="button"
+                  (click)="hideNewPassword = !hideNewPassword"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hideNewPassword">
+                  <mat-icon>{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Confirmar contraseña</mat-label>
+                <input
+                  matInput
+                  [type]="hideConfirmPassword ? 'password' : 'text'"
+                  formControlName="confirmarContrasena"
+                  placeholder="Confirma nueva contraseña">
+                <button
+                  mat-icon-button
+                  matSuffix
+                  type="button"
+                  (click)="hideConfirmPassword = !hideConfirmPassword"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hideConfirmPassword">
+                  <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="cuentaForm.get('confirmarContrasena')?.invalid && cuentaForm.get('confirmarContrasena')?.touched">
+                  {{ getErrorMessage('confirmarContrasena') }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions class="card-actions">
+        <button
+          mat-button
+          type="button"
+          class="cancel-button"
+          (click)="onCancelar()">
+          Cancelar
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          class="save-button"
+          (click)="onGuardar()"
+          [disabled]="cuentaForm.invalid">
+          Guardar cambios
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

@@ -1,1 +1,148 @@
-/* You can add global styles to this file, and also import other style files */
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=EB+Garamond:wght@400;600&display=swap');
+
+/* CSS Custom Properties */
+:root {
+  --primary-color: #3f51b5;
+  --accent-color: #ff4081;
+  --warn-color: #f44336;
+  --background: #faf9f7;
+  --surface-color: #ffffff;
+  --text-primary: #4a3c2f;
+  --text-secondary: #6d5a47;
+  --border-color: #e1dcd2;
+
+  --sidebar-background: #4a3c2f;
+  --sidebar-foreground: #faf9f7;
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'EB Garamond', serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+/* Utility classes */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--spacing-xs); }
+.mb-2 { margin-bottom: var(--spacing-sm); }
+.mb-3 { margin-bottom: var(--spacing-md); }
+.mb-4 { margin-bottom: var(--spacing-lg); }
+.mb-5 { margin-bottom: var(--spacing-xl); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--spacing-xs); }
+.mt-2 { margin-top: var(--spacing-sm); }
+.mt-3 { margin-top: var(--spacing-md); }
+.mt-4 { margin-top: var(--spacing-lg); }
+.mt-5 { margin-top: var(--spacing-xl); }
+
+/* Custom Material Design overrides */
+.mat-mdc-card {
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.mat-mdc-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.mat-mdc-button {
+  border-radius: var(--border-radius);
+  font-family: 'Merriweather', serif;
+  font-weight: 500;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-chip {
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 599px) {
+  .hide-mobile { display: none !important; }
+}
+
+@media (min-width: 600px) {
+  .show-mobile { display: none !important; }
+}
+
+@media (max-width: 959px) {
+  .hide-tablet { display: none !important; }
+}
+
+@media (min-width: 960px) {
+  .show-tablet { display: none !important; }
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px;
+  }
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Global styles */
+.page-container {
+  padding: 24px;
+}

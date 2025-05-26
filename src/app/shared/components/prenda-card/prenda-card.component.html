@@ -1,0 +1,33 @@
+<mat-card class="prenda-card">
+  <mat-card-header>
+    <mat-card-title>{{prenda.nombre}}</mat-card-title>
+    <mat-card-subtitle>{{prenda.categoria}} - {{prenda.color}}</mat-card-subtitle>
+    <button mat-icon-button (click)="onToggleFavorito()" class="favorite-btn">
+      <mat-icon [class.favorito]="prenda.favorito">
+        {{prenda.favorito ? 'favorite' : 'favorite_border'}}
+      </mat-icon>
+    </button>
+  </mat-card-header>
+
+  <img mat-card-image [src]="prenda.imagen" [alt]="prenda.nombre">
+
+  <mat-card-content>
+    <div class="chips-container">
+      <mat-chip-set>
+        <mat-chip *ngFor="let temporada of prenda.temporada">{{temporada}}</mat-chip>
+      </mat-chip-set>
+    </div>
+    <p *ngIf="prenda.notas">{{prenda.notas}}</p>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button (click)="onEditar()">
+      <mat-icon>edit</mat-icon>
+      Editar
+    </button>
+    <button mat-button color="warn" (click)="onEliminar()">
+      <mat-icon>delete</mat-icon>
+      Eliminar
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,38 @@
+.prenda-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 400px;
+
+  .form-row {
+    display: flex;
+    gap: 16px;
+
+    .full-width {
+      flex: 1;
+    }
+
+    .half-width {
+      flex: 0.5;
+    }
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .prenda-form {
+    min-width: auto;
+
+    .form-row {
+      flex-direction: column;
+      gap: 8px;
+
+      .half-width {
+        flex: 1;
+      }
+    }
+  }
+}

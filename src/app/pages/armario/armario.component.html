@@ -1,0 +1,36 @@
+<div class="armario-container">
+  <div class="header">
+    <h1>Mi Armario</h1>
+    <button mat-raised-button color="primary" (click)="abrirDialogoPrenda()">
+      <mat-icon>add</mat-icon>
+      Añadir Prenda
+    </button>
+  </div>
+
+  <div class="filters">
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Buscar prendas...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Categoría</mat-label>
+      <mat-select [formControl]="categoriaControl">
+        <mat-option *ngFor="let categoria of categorias" [value]="categoria">
+          {{categoria}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="prendas-grid">
+    <app-prenda-card
+      *ngFor="let prenda of prendasFiltradas()"
+      [prenda]="prenda"
+      (editar)="abrirDialogoPrenda(prenda)"
+      (eliminar)="eliminarPrenda(prenda)"
+      (toggleFavorito)="toggleFavorito(prenda)">
+    </app-prenda-card>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{isEditing ? 'Editar' : 'Añadir'}} Prenda</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="prendaForm" class="prenda-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="categoria" required>
+        <mat-option *ngFor="let categoria of categorias" [value]="categoria">
+          {{categoria}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Color</mat-label>
+      <mat-select formControlName="color" required>
+        <mat-option *ngFor="let color of colores" [value]="color">
+          {{color}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Temporadas</mat-label>
+      <mat-select formControlName="temporada" multiple required>
+        <mat-option *ngFor="let temporada of temporadas" [value]="temporada">
+          {{temporada}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ocasiones</mat-label>
+      <mat-select formControlName="ocasiones" multiple required>
+        <mat-option *ngFor="let ocasion of ocasiones" [value]="ocasion">
+          {{ocasion}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Marca</mat-label>
+      <input matInput formControlName="marca">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Precio</mat-label>
+      <input matInput type="number" formControlName="precio">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Notas</mat-label>
+      <textarea matInput formControlName="notas" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-checkbox formControlName="favorito">Marcar como favorito</mat-checkbox>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!prendaForm.valid">
+    {{isEditing ? 'Actualizar' : 'Añadir'}}
+  </button>
+</mat-dialog-actions>

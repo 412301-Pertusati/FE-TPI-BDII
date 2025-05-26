@@ -1,0 +1,8 @@
+<div class="chat-bubble" [ngClass]="mensaje.role">
+  <div class="message-content">
+    {{mensaje.content}}
+  </div>
+  <div class="message-time">
+    {{formatTime(mensaje.timestamp)}}
+  </div>
+</div>

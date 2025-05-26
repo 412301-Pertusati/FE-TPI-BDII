@@ -1,0 +1,81 @@
+<div class="favoritos-container">
+  <h1 class="favoritos-title">Mis Favoritos</h1>
+
+  <mat-tab-group class="favoritos-tabs" (selectedTabChange)="onTabChange($event)">
+    <mat-tab label="Prendas">
+      <div class="cards-grid">
+        <mat-card class="prenda-card" *ngFor="let prenda of prendasFavoritas">
+          <mat-card-header>
+            <mat-card-title>{{prenda.nombre}}</mat-card-title>
+            <mat-card-subtitle>{{prenda.categoria}} - {{prenda.color}}</mat-card-subtitle>
+            <button mat-icon-button (click)="onToggleFavoritoPrenda(prenda)" class="favorite-btn">
+              <mat-icon [class.favorito]="prenda.favorito">
+                {{prenda.favorito ? 'favorite' : 'favorite_border'}}
+              </mat-icon>
+            </button>
+          </mat-card-header>
+
+          <img mat-card-image [src]="prenda.imagen" [alt]="prenda.nombre">
+
+          <mat-card-content>
+            <div class="chips-container">
+              <mat-chip-set>
+                <mat-chip *ngFor="let temporada of prenda.temporada">{{temporada}}</mat-chip>
+              </mat-chip-set>
+            </div>
+            <p *ngIf="prenda.notas">{{prenda.notas}}</p>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-button (click)="onEditarPrenda(prenda)">
+              <mat-icon>edit</mat-icon>
+              Editar
+            </button>
+            <button mat-button color="warn" (click)="onEliminarPrenda(prenda)">
+              <mat-icon>delete</mat-icon>
+              Eliminar
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Outfits">
+      <div class="cards-grid">
+        <mat-card class="outfit-card" *ngFor="let outfit of outfitsFavoritos">
+          <mat-card-header>
+            <mat-card-title>{{outfit.nombre}}</mat-card-title>
+            <mat-card-subtitle>{{outfit.ocasion}}</mat-card-subtitle>
+            <button mat-icon-button (click)="onToggleFavoritoOutfit(outfit)" class="favorite-btn">
+              <mat-icon [class.favorito]="outfit.favorito">
+                {{outfit.favorito ? 'favorite' : 'favorite_border'}}
+              </mat-icon>
+            </button>
+          </mat-card-header>
+
+          <img mat-card-image [src]="outfit.imagen" [alt]="outfit.nombre">
+
+          <mat-card-content>
+            <div class="chips-container">
+              <mat-chip-set>
+                <mat-chip *ngFor="let temporada of outfit.temporada">{{temporada}}</mat-chip>
+              </mat-chip-set>
+            </div>
+            <p *ngIf="outfit.notas">{{outfit.notas}}</p>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-button (click)="onEditarOutfit(outfit)">
+              <mat-icon>edit</mat-icon>
+              Editar
+            </button>
+            <button mat-button color="warn" (click)="onEliminarOutfit(outfit)">
+              <mat-icon>delete</mat-icon>
+              Eliminar
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

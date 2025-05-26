@@ -1,0 +1,46 @@
+<div class="outfits-container">
+  <div class="header">
+    <h1>Mis Outfits</h1>
+    <button mat-raised-button color="primary" (click)="abrirDialogoOutfit()">
+      <mat-icon>add</mat-icon>
+      Crear Outfit
+    </button>
+  </div>
+
+  <div class="filters">
+    <mat-form-field appearance="outline">
+      <mat-label>Buscar</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Buscar outfits...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ocasión</mat-label>
+      <mat-select [formControl]="ocasionControl">
+        <mat-option *ngFor="let ocasion of ocasiones" [value]="ocasion">
+          {{ocasion}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="outfits-grid" *ngIf="outfitsFiltrados().length > 0; else emptyState">
+    <app-outfit-card
+      *ngFor="let outfit of outfitsFiltrados()"
+      [outfit]="outfit"
+      (editar)="abrirDialogoOutfit(outfit)"
+      (eliminar)="eliminarOutfit(outfit)"
+      (toggleFavorito)="toggleFavorito(outfit)">
+    </app-outfit-card>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <mat-icon>style</mat-icon>
+      <p>No se encontraron outfits</p>
+      <button mat-raised-button color="primary" (click)="abrirDialogoOutfit()">
+        Crear primer outfit
+      </button>
+    </div>
+  </ng-template>
+</div>

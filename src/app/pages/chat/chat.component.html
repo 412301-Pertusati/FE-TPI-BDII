@@ -1,0 +1,37 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h1>Asistente de Moda</h1>
+    <button mat-raised-button color="primary" (click)="iniciarNuevaConversacion()">
+      <mat-icon>add</mat-icon>
+      Nueva conversación
+    </button>
+  </div>
+
+  <div class="messages-container" #messagesContainer>
+    <div *ngIf="conversacionActual() as conversacion">
+      <app-chat-bubble
+        *ngFor="let mensaje of conversacion.mensajes"
+        [mensaje]="mensaje">
+      </app-chat-bubble>
+    </div>
+  </div>
+
+  <div class="input-container">
+    <mat-form-field appearance="outline" class="message-input">
+      <mat-label>Escribe tu mensaje...</mat-label>
+      <textarea
+        matInput
+        [formControl]="messageControl"
+        (keydown)="onKeyDown($event)"
+        rows="2">
+      </textarea>
+    </mat-form-field>
+    <button
+      mat-fab
+      color="primary"
+      (click)="enviarMensaje()"
+      [disabled]="!messageControl.value?.trim()">
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+</div>

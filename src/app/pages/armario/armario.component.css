@@ -1,0 +1,136 @@
+.armario-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+
+  .page-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 0;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.filters-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+  gap: 16px;
+
+  .search-filters {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+
+    .search-field {
+      flex: 1;
+      max-width: 400px;
+    }
+
+    .category-field {
+      min-width: 150px;
+    }
+  }
+
+  .view-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.categories-tabs {
+  .tab-content {
+    padding: 24px 0;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+}
+
+.prendas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.prendas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .filters-section {
+    flex-direction: column;
+    align-items: stretch;
+
+    .search-filters {
+      flex-direction: column;
+
+      .search-field {
+        max-width: none;
+      }
+    }
+
+    .view-controls {
+      justify-content: space-between;
+    }
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .prendas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+  }
+}
