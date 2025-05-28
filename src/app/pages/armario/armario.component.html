@@ -1,36 +1,48 @@
-<div class="armario-container">
-  <div class="header">
-    <h1>Mi Armario</h1>
-    <button mat-raised-button color="primary" (click)="abrirDialogoPrenda()">
-      <mat-icon>add</mat-icon>
-      Añadir Prenda
-    </button>
-  </div>
 
-  <div class="filters">
-    <mat-form-field appearance="outline">
-      <mat-label>Buscar</mat-label>
-      <input matInput [formControl]="searchControl" placeholder="Buscar prendas...">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+<div class="flex gap-6 flex-wrap w-full p-8 h-full">
+  <div class="flex justify-center items-center min-h-screen" *ngFor="let cloth of clothes">
+    <div class="max-w-[720px] mx-auto">
+      <!-- Centering wrapper -->
+      <div class="relative flex flex-col text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-96">
+        <div class="relative mx-4 mt-4 overflow-hidden text-gray-700 bg-white bg-clip-border rounded-xl h-96">
+          <img
+            [src]="cloth.urlFoto"
+            alt="card-image" class="object-cover w-full h-full" />
+        </div>
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-2">
+            <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+              Apple AirPods
+            </p>
+            <p class="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+              $95.00
+            </p>
+          </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Categoría</mat-label>
-      <mat-select [formControl]="categoriaControl">
-        <mat-option *ngFor="let categoria of categorias" [value]="categoria">
-          {{categoria}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+          <button
+            *ngIf="cloth.favorite" (click)="changeFavorite(cloth.id)"
+            class=" middle none center text-pink-500 flex items-center justify-center rounded-lg p-3 font-sans text-xs font-bold uppercase transition-all hover:bg-pink-500/10  disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none "
+            data-ripple-dark="true">
+            <mat-icon> favorite </mat-icon>
+          </button>
+          <button
+            *ngIf="!cloth.favorite" (click)="changeFavorite(cloth.id)"
+            class=" middle none center flex items-center justify-center rounded-lg p-3 font-sans text-xs font-bold uppercase transition-all hover:bg-pink-500/10  disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none "
+            data-ripple-dark="true">
+            <mat-icon> favorite_outline </mat-icon>
+          </button>
 
-  <div class="prendas-grid">
-    <app-prenda-card
-      *ngFor="let prenda of prendasFiltradas()"
-      [prenda]="prenda"
-      (editar)="abrirDialogoPrenda(prenda)"
-      (eliminar)="eliminarPrenda(prenda)"
-      (toggleFavorito)="toggleFavorito(prenda)">
-    </app-prenda-card>
+        </div>
+        <div class="p-6 pt-0">
+          <button
+            class="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg shadow-gray-900/10 hover:shadow-gray-900/20 focus:opacity-[0.85] active:opacity-[0.85] active:shadow-none block w-full bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
+            type="button">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+

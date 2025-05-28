@@ -39,7 +39,7 @@ export class OutfitDialogComponent implements OnInit {
 
   temporadas = TEMPORADAS_DISPONIBLES
   ocasiones = OCASIONES_DISPONIBLES
-  prendas = this.prendaService.prendas
+  // prendas = this.prendaService.prendas
 
   constructor() {
     this.isEditing = !!this.data

@@ -25,7 +25,6 @@ export class SidebarComponent {
   currentPath = ""
 
   menuItems: MenuItem[] = [
-    { title: "Chat", icon: "chat", path: "/" },
     { title: "Armario", icon: "checkroom", path: "/armario" },
     { title: "Outfits", icon: "style", path: "/outfits" },
     { title: "Favoritos", icon: "favorite", path: "/favoritos" },
@@ -41,5 +40,10 @@ export class SidebarComponent {
 
   isActive(path: string): boolean {
     return this.currentPath === path
+  }
+
+  logOut() {
+    localStorage.removeItem("token")
+    this.router.navigateByUrl("/login")
   }
 }

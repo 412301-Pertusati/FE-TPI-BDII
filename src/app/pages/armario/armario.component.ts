@@ -1,6 +1,6 @@
 import { Component, inject, computed } from "@angular/core"
 import { FormControl, ReactiveFormsModule } from "@angular/forms"
-import { NgIf, NgFor } from "@angular/common"
+import {NgIf, NgFor, NgClass} from "@angular/common"
 import { MatCardModule } from "@angular/material/card"
 import { MatButtonModule } from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
@@ -29,66 +29,38 @@ import type { Prenda } from "../../core/models/prenda.model"
     MatInputModule,
     MatSelectModule,
     PrendaCardComponent,
+    NgClass,
   ],
   templateUrl: "./armario.component.html",
   styleUrls: ["./armario.component.css"],
 })
 export class ArmarioComponent {
-  private prendaService = inject(PrendaService)
-  private dialog = inject(MatDialog)
-  private snackBar = inject(MatSnackBar)
 
-  prendas = this.prendaService.prendas
-  searchControl = new FormControl("")
-  categoriaControl = new FormControl("Todas")
-  categorias = CATEGORIAS_DISPONIBLES
+  public clothes: Prenda[] = [];
 
-  prendasFiltradas = computed(() => {
-    let filtradas = [...this.prendas()]
+  constructor(private prendaService: PrendaService) {}
 
-    const categoria = this.categoriaControl.value
-    if (categoria && categoria !== "Todas") {
-      filtradas = filtradas.filter((p) => p.categoria === categoria)
-    }
+  ngOnInit() {
+    this.getClothesGeneral();
+  }
 
-    const busqueda = this.searchControl.value?.toLowerCase() || ""
-    if (busqueda) {
-      filtradas = filtradas.filter(
-        (p) =>
-          p.nombre.toLowerCase().includes(busqueda) ||
-          p.categoria.toLowerCase().includes(busqueda) ||
-          p.color.toLowerCase().includes(busqueda),
-      )
-    }
-
-    return filtradas
-  })
-
-  abrirDialogoPrenda(prenda?: Prenda): void {
-    const dialogRef = this.dialog.open(PrendaDialogComponent, {
-      width: "600px",
-      data: prenda ? { ...prenda } : null,
-    })
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        if (prenda) {
-          this.prendaService.actualizarPrenda(prenda.id, result)
-          this.snackBar.open("Prenda actualizada", "Cerrar", { duration: 3000 })
-        } else {
-          this.prendaService.agregarPrenda(result)
-          this.snackBar.open("Prenda añadida", "Cerrar", { duration: 3000 })
-        }
-      }
+  getClothesGeneral() {
+    this.prendaService.getClothes().subscribe({
+      next: data => {
+        this.clothes = data
+      },
+      error: error => console.log(error),
     })
   }
 
-  eliminarPrenda(prenda: Prenda): void {
-    this.prendaService.eliminarPrenda(prenda.id)
-    this.snackBar.open("Prenda eliminada", "Cerrar", { duration: 3000 })
+  changeFavorite(id: string) {
+    this.prendaService.changeFavorite(id).subscribe({
+      next: data => {
+        this.getClothesGeneral();
+      },
+      error: error => console.log(error),
+    })
   }
 
-  toggleFavorito(prenda: Prenda): void {
-    this.prendaService.toggleFavorito(prenda.id)
-  }
+
 }

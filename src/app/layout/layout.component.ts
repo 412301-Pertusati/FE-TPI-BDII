@@ -5,7 +5,7 @@ import { MatButtonModule } from "@angular/material/button"
 import { MatSidenavModule } from "@angular/material/sidenav"
 import { MatListModule } from "@angular/material/list"
 import { MatIconModule } from "@angular/material/icon"
-import { RouterOutlet } from "@angular/router"
+import {Router, RouterOutlet} from "@angular/router"
 import { SidebarComponent } from "./sidebar/sidebar.component"
 import { map, shareReplay } from "rxjs/operators"
 import { AsyncPipe } from "@angular/common"
@@ -29,8 +29,15 @@ import { AsyncPipe } from "@angular/common"
 export class LayoutComponent {
   private breakpointObserver = inject(BreakpointObserver)
 
+  constructor(private router: Router) {}
+
   isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),
     shareReplay(),
   )
+
+  ngOnInit() {
+    this.router.navigateByUrl("/armario")
+  }
+
 }
