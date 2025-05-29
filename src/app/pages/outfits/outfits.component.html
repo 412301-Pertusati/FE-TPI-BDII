@@ -1,6 +1,6 @@
 <div class="min-h-screen bg-gray-50 p-4 md:p-6">
   <div class="max-w-7xl mx-auto">
-    
+
     <!-- Header -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-gray-900 mb-2">Mis Outfits</h1>
@@ -8,7 +8,7 @@
     </div>
 
     <!-- Formulario para generar nuevo outfit -->
-   <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg shadow-md p-6 mb-8">
+   <div class="bg-gradient-to-r from-[#e8e0d4] to-[#f9f6f1] rounded-lg shadow-md p-6 mb-8 ">
       <div class="mb-4">
         <h2 class="text-xl font-semibold text-gray-900 flex items-center mb-2">
           <svg class="w-6 h-6 mr-2 text-[#4A3C2F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -24,7 +24,7 @@
           <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
             Descripción del outfit
           </label>
-          <textarea 
+          <textarea
             id="description"
             [(ngModel)]="newOutfitDescription"
             placeholder="Ej: Un outfit casual para el fin de semana, algo elegante para una cena, ropa deportiva para el gimnasio..."
@@ -35,9 +35,9 @@
           ></textarea>
           <p class="text-sm text-gray-500 mt-1">Presiona Ctrl+Enter para generar</p>
         </div>
-        
+
       </div>
-      <button 
+      <button
         (click)="generateOutfit()"
         [disabled]="generatingOutfit || !newOutfitDescription.trim()"
         class="h-14 px-8 bg-[#4A3C2F] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center min-w-[140px]"
@@ -74,8 +74,8 @@
       <p class="text-gray-500 mb-6 max-w-md mx-auto">
         Comienza creando tu primer outfit describiendo el tipo de combinación que quieres
       </p>
-      <button 
-        mat-raised-button 
+      <button
+        mat-raised-button
         color="primary"
         (click)="focusTextarea()"
       >
@@ -86,24 +86,24 @@
 
     <!-- Carrusel de outfits -->
     <div *ngIf="!loading && outfits.length > 0" class="relative" (window:resize)="onResize()">
-      
+
       <!-- Controles del carrusel -->
       <div class="flex items-center gap-4 mb-6">
-        <button 
-          mat-icon-button 
+        <button
+          mat-icon-button
           class="flex-shrink-0 w-12 h-12 bg-white shadow-md hover:shadow-lg transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"
           [disabled]="!canGoPrev"
           (click)="prevSlide()"
         >
           <mat-icon>chevron_left</mat-icon>
         </button>
-        
+
         <div class="flex-1 overflow-hidden rounded-xl shadow-lg bg-white p-6">
           <div class="flex transition-transform duration-500 ease-out gap-6"
                [style.transform]="'translateX(-' + (currentIndex * (100 / itemsPerView)) + '%)'">
-            
-            <mat-card 
-              *ngFor="let outfit of outfits; trackBy: trackByOutfit" 
+
+            <mat-card
+              *ngFor="let outfit of outfits; trackBy: trackByOutfit"
               class="flex-shrink-0 max-w-[400px] transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
               [ngClass]="{
                 'w-full': itemsPerView === 1,
@@ -114,12 +114,12 @@
               <mat-card-header class="relative pb-4">
                 <div class="flex items-start justify-between w-full">
                   <div>
-                    <mat-card-title class="text-lg">Outfit #{{outfit.id}}</mat-card-title>
+                    <mat-card-title class="text-lg">Outfit </mat-card-title>
                     <mat-card-subtitle>{{outfit.outfit.length}} prendas</mat-card-subtitle>
                   </div>
-                  <button 
-                    mat-icon-button 
-                    (click)="onToggleFavorite(outfit)" 
+                  <button
+                    mat-icon-button
+                    (click)="onToggleFavorite(outfit)"
                     class="bg-gray-50 hover:bg-gray-100 transition-colors"
                   >
                     <mat-icon [ngClass]="{'text-pink-600': outfit.favorite, 'text-gray-400': !outfit.favorite}">
@@ -129,24 +129,24 @@
                 </div>
               </mat-card-header>
 
-              <mat-card-content class="pb-4">
+              <mat-card-content class="pb-4 shadow-xl">
                 <!-- Grid de imágenes de prendas -->
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                  <div 
-                    *ngFor="let prenda of outfit.outfit.slice(0, 4); let i = index" 
+                <div class="grid grid-cols-2 gap-3 mb-4 ">
+                  <div
+                    *ngFor="let prenda of outfit.outfit.slice(0, 4); let i = index"
                     class="relative group cursor-pointer"
                     (click)="onViewOutfitDetails(outfit)"
                   >
-                    <img 
-                      [src]="prenda.urlFoto" 
+                    <img
+                      [src]="prenda.urlFoto"
                       [alt]="prenda.tipo"
                       class="w-full h-24 object-cover rounded-lg transition-transform group-hover:scale-105"
                     >
-                    <div *ngIf="i === 3 && outfit.outfit.length > 4" 
+                    <div *ngIf="i === 3 && outfit.outfit.length > 4"
                          class="absolute inset-0  bg-opacity-60 flex items-center justify-center rounded-lg">
                       <span class="text-white text-sm font-bold">+{{outfit.outfit.length - 4}}</span>
                     </div>
-                    
+
                     <!-- Overlay con información de la prenda -->
                     <div class="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 rounded-lg flex items-end">
                       <div class="p-2 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity">
@@ -155,20 +155,20 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Chips de tipos y colores -->
                 <div class="space-y-2">
                   <div class="flex flex-wrap gap-1">
-                    <mat-chip 
-                      *ngFor="let type of getOutfitTypes(outfit)" 
+                    <mat-chip
+                      *ngFor="let type of getOutfitTypes(outfit)"
                       class="text-xs"
                     >
                       {{type}}
                     </mat-chip>
                   </div>
                   <!-- <div class="flex flex-wrap gap-1">
-                    <span 
-                      *ngFor="let color of getOutfitColors(outfit)" 
+                    <span
+                      *ngFor="let color of getOutfitColors(outfit)"
                       class="inline-block w-4 h-4 rounded-full border border-gray-300"
                       [style.background-color]="color"
                       [title]="color"
@@ -177,41 +177,41 @@
                 </div>
               </mat-card-content>
 
-              <mat-card-actions class="flex justify-between pt-0">
-                <div class="flex gap-1">
-                  <button 
-                    mat-button 
-                    (click)="onViewOutfitDetails(outfit)"
-                    class="text-blue-600"
-                  >
-                    <mat-icon class="mr-1">visibility</mat-icon>
-                    Ver
-                  </button>
-                  <button 
-                    mat-button 
-                    (click)="onEditOutfit(outfit)"
-                    class="text-green-600"
-                  >
-                    <mat-icon class="mr-1">edit</mat-icon>
-                    Editar
-                  </button>
-                </div>
-                <button 
-                  mat-button 
-                  color="warn" 
-                  (click)="onDeleteOutfit(outfit)"
-                >
-                  <mat-icon class="mr-1">delete</mat-icon>
-                  Eliminar
-                </button>
-              </mat-card-actions>
+<!--              <mat-card-actions class="flex justify-between pt-0">-->
+<!--                <div class="flex gap-1">-->
+<!--                  <button -->
+<!--                    mat-button -->
+<!--                    (click)="onViewOutfitDetails(outfit)"-->
+<!--                    class="text-blue-600"-->
+<!--                  >-->
+<!--                    <mat-icon class="mr-1">visibility</mat-icon>-->
+<!--                    Ver-->
+<!--                  </button>-->
+<!--                  <button -->
+<!--                    mat-button -->
+<!--                    (click)="onEditOutfit(outfit)"-->
+<!--                    class="text-green-600"-->
+<!--                  >-->
+<!--                    <mat-icon class="mr-1">edit</mat-icon>-->
+<!--                    Editar-->
+<!--                  </button>-->
+<!--                </div>-->
+<!--                <button -->
+<!--                  mat-button -->
+<!--                  color="warn" -->
+<!--                  (click)="onDeleteOutfit(outfit)"-->
+<!--                >-->
+<!--                  <mat-icon class="mr-1">delete</mat-icon>-->
+<!--                  Eliminar-->
+<!--                </button>-->
+<!--              </mat-card-actions>-->
             </mat-card>
-            
+
           </div>
         </div>
-        
-        <button 
-          mat-icon-button 
+
+        <button
+          mat-icon-button
           class="flex-shrink-0 w-12 h-12 bg-white shadow-md hover:shadow-lg transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"
           [disabled]="!canGoNext"
           (click)="nextSlide()"
@@ -219,10 +219,10 @@
           <mat-icon>chevron_right</mat-icon>
         </button>
       </div>
-      
+
       <!-- Indicadores de posición -->
       <div class="flex justify-center gap-2 mt-6" *ngIf="outfits.length > itemsPerView">
-        <button 
+        <button
           *ngFor="let slide of [].constructor(totalSlides); let i = index"
           class="w-3 h-3 rounded-full border-0 transition-all duration-300 cursor-pointer"
           [ngClass]="{
@@ -232,13 +232,13 @@
           (click)="goToSlide(i * itemsPerView)"
         ></button>
       </div>
-      
+
       <!-- Contador de elementos -->
       <div class="text-center mt-4 text-sm text-gray-600">
-        Mostrando {{currentIndex + 1}}-{{Math.min(currentIndex + itemsPerView, outfits.length)}} 
+        Mostrando {{currentIndex + 1}}-{{Math.min(currentIndex + itemsPerView, outfits.length)}}
         de {{outfits.length}} outfits
       </div>
-      
+
     </div>
 
   </div>
