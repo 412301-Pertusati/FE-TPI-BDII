@@ -38,6 +38,8 @@ export class ArmarioComponent {
 
   public clothes: Prenda[] = [];
 
+  public clothesAtributes: Prenda[] = []
+
   constructor(private prendaService: PrendaService) {}
 
   ngOnInit() {
@@ -62,5 +64,64 @@ export class ArmarioComponent {
     })
   }
 
+  delete(id: string) {
+    this.prendaService.deleteClothes(id).subscribe({
+      next: data => {
+        if (data) {
+          this.getClothesGeneral()
+        }
+      },
+      error: error => console.log(error),
+    })
+  }
 
+
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    // Podés agregar clases si querés resaltar visualmente
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    // Restaurar estilos si se usan
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length === 1) {
+      const file = files[0];
+
+      console.log('Archivo recibido:', file);
+
+      this.prendaService.newClothes(file).subscribe({
+        next: data => {
+          this.getClothesGeneral(); // refresca tu lista de prendas
+        },
+        error: error => console.error(error),
+      });
+    } else {
+      console.warn('Debe soltar solo un archivo.');
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const element = event.target as HTMLInputElement;
+    const file = element.files?.[0];
+    if (file) {
+      console.log('Archivo seleccionado:', file);
+
+      this.prendaService.newClothes(file).subscribe({
+        next: data => {
+          this.getClothesGeneral();
+        },
+        error: error => console.error(error),
+      });
+    }
+  }
 }

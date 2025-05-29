@@ -31,21 +31,30 @@ export class EstiloComponent implements OnInit {
 
   constructor(
     private miEstiloService: MiEstiloService
-  ) {
-  }
+  ) { }
 
   datos?: miEstilo;
 
   ngOnInit(): void {
-    this.loadUserConfiguration();
+    this.getStats();
   }
 
+  getStats(): void {
+    const storedData = localStorage.getItem('miEstilo');
+
+    if (storedData) {
+      // Si hay datos en localStorage, los usamos directamente
+      this.datos = JSON.parse(storedData);
+    } else {
+      // Si no hay datos, los obtenemos del servicio y los guardamos
+      this.loadUserConfiguration();
+    }
+  }
 
   loadUserConfiguration(): void {
-    // Aquí cargarías la configuración desde tu servicio
     this.miEstiloService.getStatsByToken().subscribe(data => {
       this.datos = data;
+      localStorage.setItem('miEstilo', JSON.stringify(data)); // Guardamos en localStorage
     });
   }
-
 }

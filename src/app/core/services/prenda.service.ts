@@ -1,6 +1,6 @@
 import { Injectable, signal } from "@angular/core"
 import type { Prenda } from "../models/prenda.model"
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
 interface ClothesResponseDTO extends Prenda {}
 @Injectable({
@@ -25,6 +25,26 @@ export class PrendaService {
     return response;
   }
 
+  deleteClothes(clotheId: string) {
+    const token = localStorage.getItem("token");
+    return this.http.delete<boolean>(`${this.url}/deleteClothesById`, {
+      headers: {
+        authorization: `Bearer ${token}`
+      },
+      params: new HttpParams().set("id", clotheId)
+    });
+  }
 
+  newClothes(file: File) {
+    const formData = new FormData();
+    formData.append('imagen', file); // clave debe coincidir con el nombre del parámetro en el backend
 
+    const token = localStorage.getItem('token') || '';
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.post(`${this.url}/newClothes`, formData, { headers });
+  }
 }
