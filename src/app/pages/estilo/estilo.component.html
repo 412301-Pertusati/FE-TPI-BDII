@@ -1,10 +1,6 @@
 <div class="mi-estilo-container">
   <div class="header">
     <h1 class="title">Mi Estilo</h1>
-    <button mat-raised-button color="primary" class="edit-button" (click)="onEditarPerfil()">
-      <mat-icon>edit</mat-icon>
-      Editar Perfil
-    </button>
   </div>
 
   <div class="content-grid">
@@ -16,17 +12,13 @@
       </div>
 
       <div class="card-content">
-        <div class="estilo-description">
-          <p>{{ estiloPersonal }}</p>
-        </div>
 
         <div class="section">
-          <h3 class="section-title">Colores favoritos</h3>
+          <h3 class="section-title">Colores frecuentes</h3>
           <div class="chips-container">
             <mat-chip-set>
               <mat-chip
-                *ngFor="let color of configuracion.coloresFavoritos"
-                [class]="getColorClass(color)">
+                *ngFor="let color of datos?.coloresFrecuentes">
                 {{ color }}
               </mat-chip>
             </mat-chip-set>
@@ -34,11 +26,22 @@
         </div>
 
         <div class="section">
-          <h3 class="section-title">Estampados preferidos</h3>
+          <h3 class="section-title">Estilos frecuentes</h3>
           <div class="chips-container">
             <mat-chip-set>
-              <mat-chip *ngFor="let estampado of estampadosPreferidos">
-                {{ estampado }}
+              <mat-chip *ngFor="let estilo of datos?.estilosFrecuentes">
+                {{ estilo }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">Patrones frecuentes</h3>
+          <div class="chips-container">
+            <mat-chip-set>
+              <mat-chip *ngFor="let patron of datos?.patronesFrecuentes">
+                {{ patron }}
               </mat-chip>
             </mat-chip-set>
           </div>
@@ -48,21 +51,18 @@
           <h3 class="section-title">Prendas favoritas</h3>
           <div class="chips-container">
             <mat-chip-set>
-              <mat-chip *ngFor="let prenda of prendasFavoritas">
-                {{ prenda }}
+              <mat-chip *ngFor="let prenda of datos?.prendasFavoritas?.porTipo | keyvalue">
+                {{ prenda.key }}
               </mat-chip>
             </mat-chip-set>
           </div>
         </div>
 
+
         <div class="section">
-          <h3 class="section-title">Ocasiones frecuentes</h3>
+          <h3 class="section-title">Estacion Predeminante</h3>
           <div class="chips-container">
-            <mat-chip-set>
-              <mat-chip *ngFor="let ocasion of ocasionesFrecuentes">
-                {{ ocasion }}
-              </mat-chip>
-            </mat-chip-set>
+              <p>{{datos?.estacionPredominante}}</p>
           </div>
         </div>
       </div>
@@ -77,17 +77,10 @@
 
       <div class="card-content">
         <div class="estadisticas-list">
-          <div class="estadistica-item" *ngFor="let estadistica of estadisticasPrendas">
+          <div class="estadistica-item" *ngFor="let key of datos?.usoEnOutfits | keyvalue">
             <div class="estadistica-info">
-              <span class="categoria-name">{{ estadistica.categoria }}</span>
-              <span class="cantidad">{{ estadistica.cantidad }} prenda{{ estadistica.cantidad !== 1 ? 's' : '' }}</span>
-            </div>
-            <div class="progress-container">
-              <mat-progress-bar
-                mode="determinate"
-                [value]="estadistica.porcentaje"
-                class="progress-bar">
-              </mat-progress-bar>
+              <span class="categoria-name">{{ key.key }}</span>
+              <span class="cantidad">{{ key.value }} prenda{{ key.value !== 1 ? 's' : '' }}</span>
             </div>
           </div>
         </div>

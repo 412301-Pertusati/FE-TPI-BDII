@@ -6,7 +6,8 @@ export const routes: Routes = [
   {
     path: "",
     component: LayoutComponent,
-    // canActivateChild: [AuthGuard],
+    //canActivateChild: [AuthGuard],
+
     children: [
       {
         path: "armario",
