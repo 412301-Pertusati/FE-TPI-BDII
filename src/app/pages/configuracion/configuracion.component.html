@@ -1,128 +1,160 @@
-<div class="configuracion-container">
-  <div class="header">
-    <h1 class="title">Configuración</h1>
-  </div>
+<div class="min-h-screen flex items-center justify-center p-8">
+  <div class="max-w-6xl max-h-4xl mx-auto">
+    <!-- Título principal -->
+    <div class="mb-5">
+      <h1 class="text-4xl font-serif font-normal" style="color: #4a5240;">Configuración</h1>
+    </div>
 
-  <div class="content">
-    <mat-card class="cuenta-card">
-      <mat-card-header class="card-header">
-        <mat-card-title class="section-title">
-          <mat-icon class="section-icon">person</mat-icon>
-          Información de cuenta
-        </mat-card-title>
-        <mat-card-subtitle class="section-subtitle">
-          Actualiza tu información personal
-        </mat-card-subtitle>
-      </mat-card-header>
 
-      <mat-card-content class="card-content">
-        <form [formGroup]="cuentaForm" (ngSubmit)="onGuardar()">
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Nombre</mat-label>
-              <input
-                matInput
-                formControlName="nombre"
-                placeholder="Ingresa tu nombre completo">
-              <mat-error *ngIf="cuentaForm.get('nombre')?.invalid && cuentaForm.get('nombre')?.touched">
-                {{ getErrorMessage('nombre') }}
-              </mat-error>
-            </mat-form-field>
+    <!-- Card principal -->
+    <div class="rounded-lg p-8 shadow-sm" style="background-color: #faf7f2;">
+      <!-- Header de la sección -->
+      <div class="flex items-center gap-1 mb-2">
+        <i class="fas fa-user" style="color: #4a5240;">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style="color: #4a5240;">
+            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+          </svg>
+        </i>
+        <h2 class="text-xl !font-sans" style="color: #4a5240;">Información de cuenta</h2>
+      </div>
 
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Email</mat-label>
-              <input
-                matInput
-                type="email"
-                formControlName="email"
-                placeholder="Ingresa tu email">
-              <mat-error *ngIf="cuentaForm.get('email')?.invalid && cuentaForm.get('email')?.touched">
-                {{ getErrorMessage('email') }}
-              </mat-error>
-            </mat-form-field>
+      <!-- Subtítulo -->
+      <p class="mb-8 text-sm" style="color: #4a5240;">Actualiza tu información personal</p>
+
+      <!-- Formulario -->
+      <form class="space-y-6">
+        <!-- Fila de Nombre y Email -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium mb-2" style="color: #4a5240;">
+              Nombre<span class="text-red-700">*</span>
+            </label>
+            <input
+              type="text"
+              value="{{configuracion.nombre}}"
+              class="w-full px-3 py-2 border border-gray-300 bg-stone-50 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-button focus:border-transparent"
+              style="color: #4a5240"
+            >
           </div>
+          <div>
+            <label class="block text-sm font-medium mb-2" style="color: #4a5240;">
+              Email<span class="text-red-700">*</span>
+            </label>
+            <input
+              type="email"
+              value="{{configuracion.email}}"
+              class="w-full px-3 py-2 border border-gray-300 bg-stone-50 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-button focus:border-transparent"
+              style="color: #4a5240;"
+            >
+          </div>
+        </div>
 
-          <div class="password-section">
-            <mat-form-field appearance="outline" class="form-field full-width">
-              <mat-label>Contraseña actual</mat-label>
+        <!-- Contraseña actual -->
+        <div>
+          <label class="block text-sm font-medium mb-2" style="color: #4a5240;">
+            Contraseña actual
+          </label>
+          <div class="relative">
+            <input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              placeholder="Contraseña actual"
+              class="w-full px-3 py-2 pr-10 border border-gray-300 bg-stone-50 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-button focus:border-transparent"
+              style="color: #4a5240;"
+            >
+            <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" (click)="toggleConfirmPassword()">
+              <!-- Icono mostrar (cuando la contraseña está oculta) -->
+              <svg *ngIf="!showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #4a5240;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              <!-- Icono ocultar (cuando la contraseña está visible) -->
+              <svg *ngIf="showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #4a5240;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Fila de Nueva contraseña y Confirmar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium mb-2" style="color: #4a5240;">
+              Nueva contraseña
+            </label>
+            <div class="relative">
               <input
-                matInput
-                [type]="hideCurrentPassword ? 'password' : 'text'"
-                formControlName="contrasenaActual"
-                placeholder="Ingresa tu contraseña actual">
-              <button
-                mat-icon-button
-                matSuffix
-                type="button"
-                (click)="hideCurrentPassword = !hideCurrentPassword"
-                [attr.aria-label]="'Hide password'"
-                [attr.aria-pressed]="hideCurrentPassword">
-                <mat-icon>{{hideCurrentPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                placeholder="Nueva contraseña"
+                class="w-full px-3 py-2 pr-10 border border-gray-300 bg-stone-50 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-button focus:border-transparent"
+                style="color: #4a5240;"
+              >
+              <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" (click)="toggleConfirmPassword()">
+                <!-- Icono mostrar (cuando la contraseña está oculta) -->
+                <svg *ngIf="!showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #4a5240;">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+                <!-- Icono ocultar (cuando la contraseña está visible) -->
+                <svg *ngIf="showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #4a5240;">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
+                </svg>
               </button>
-            </mat-form-field>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Nueva contraseña</mat-label>
-                <input
-                  matInput
-                  [type]="hideNewPassword ? 'password' : 'text'"
-                  formControlName="nuevaContrasena"
-                  placeholder="Ingresa nueva contraseña">
-                <button
-                  mat-icon-button
-                  matSuffix
-                  type="button"
-                  (click)="hideNewPassword = !hideNewPassword"
-                  [attr.aria-label]="'Hide password'"
-                  [attr.aria-pressed]="hideNewPassword">
-                  <mat-icon>{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Confirmar contraseña</mat-label>
-                <input
-                  matInput
-                  [type]="hideConfirmPassword ? 'password' : 'text'"
-                  formControlName="confirmarContrasena"
-                  placeholder="Confirma nueva contraseña">
-                <button
-                  mat-icon-button
-                  matSuffix
-                  type="button"
-                  (click)="hideConfirmPassword = !hideConfirmPassword"
-                  [attr.aria-label]="'Hide password'"
-                  [attr.aria-pressed]="hideConfirmPassword">
-                  <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-                <mat-error *ngIf="cuentaForm.get('confirmarContrasena')?.invalid && cuentaForm.get('confirmarContrasena')?.touched">
-                  {{ getErrorMessage('confirmarContrasena') }}
-                </mat-error>
-              </mat-form-field>
             </div>
           </div>
-        </form>
-      </mat-card-content>
+          <div>
+            <label class="block text-sm font-medium mb-2" style="color: #4a5240;">
+              Confirmar contraseña
+            </label>
+            <div class="relative">
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                placeholder="Confirmar contraseña"
+                class="w-full px-3 py-2 pr-10 border border-gray-300 bg-stone-50 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-button focus:border-transparent"
+                style="color: #4a5240;"
+              >
+              <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" (click)="toggleConfirmPassword()">
+                <!-- Icono mostrar (cuando la contraseña está oculta) -->
+                <svg *ngIf="!showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #4a5240;">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+                <!-- Icono ocultar (cuando la contraseña está visible) -->
+                <svg *ngIf="showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #4a5240;">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
 
-      <mat-card-actions class="card-actions">
-        <button
-          mat-button
-          type="button"
-          class="cancel-button"
-          (click)="onCancelar()">
-          Cancelar
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          type="button"
-          class="save-button"
-          (click)="onGuardar()"
-          [disabled]="cuentaForm.invalid">
-          Guardar cambios
-        </button>
-      </mat-card-actions>
-    </mat-card>
+
+
+    <!-- Botones -->
+    <div class="flex justify-end gap-4 pt-6">
+      <button
+        type="button"
+        class="px-6 py-2 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors font-medium"
+        style="color: #4a5240;"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="px-6 py-2 rounded-md text-white hover:opacity-90 transition-opacity font-medium"
+        style="background-color: #6e7865;"
+      >
+        Guardar cambios
+      </button>
+    </div>
+    </form>
   </div>
+</div>
+
+
 </div>

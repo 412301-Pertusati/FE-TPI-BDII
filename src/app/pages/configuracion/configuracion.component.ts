@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +15,7 @@ import {ConfiguracionUsuario} from '../../core/models/configuracion.model';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -29,8 +30,8 @@ export class ConfiguracionComponent implements OnInit {
   cuentaForm: FormGroup;
   configuracion: ConfiguracionUsuario = {
     id: '1',
-    nombre: 'Ana García',
-    email: 'ana.garcia@ejemplo.com',
+    nombre: 'Mateo Pillado',
+    email: '415589@tec.frc.utn.edu.ar',
     preferenciasEstilo: [],
     coloresFavoritos: [],
     marcasFavoritas: [],
@@ -154,5 +155,22 @@ export class ConfiguracionComponent implements OnInit {
     }
 
     return '';
+  }
+
+  showCurrentPassword = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
+
+
+  toggleCurrentPassword() {
+    this.showCurrentPassword = !this.showCurrentPassword;
+  }
+
+  toggleNewPassword() {
+    this.showNewPassword = !this.showNewPassword;
+  }
+
+  toggleConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }
