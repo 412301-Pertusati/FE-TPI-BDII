@@ -37,6 +37,7 @@ import type { Prenda } from "../../core/models/prenda.model"
 export class ArmarioComponent {
 
   public clothes: Prenda[] = [];
+  public isUploading: boolean = false;
 
   public clothesAtributes: Prenda[] = []
 
@@ -96,14 +97,19 @@ export class ArmarioComponent {
     const files = event.dataTransfer?.files;
     if (files && files.length === 1) {
       const file = files[0];
+      this.isUploading = true;
 
       console.log('Archivo recibido:', file);
 
       this.prendaService.newClothes(file).subscribe({
         next: data => {
           this.getClothesGeneral(); // refresca tu lista de prendas
+          this.isUploading = false;
         },
-        error: error => console.error(error),
+        error: error => {
+          console.error(error);
+          this.isUploading = false;
+        }
       });
     } else {
       console.warn('Debe soltar solo un archivo.');
@@ -115,12 +121,16 @@ export class ArmarioComponent {
     const file = element.files?.[0];
     if (file) {
       console.log('Archivo seleccionado:', file);
+      this.isUploading = true;
 
       this.prendaService.newClothes(file).subscribe({
         next: data => {
           this.getClothesGeneral();
+          this.isUploading = false;
         },
-        error: error => console.error(error),
+        error: error => {
+          console.error(error);
+          this.isUploading = false;}
       });
     }
   }
