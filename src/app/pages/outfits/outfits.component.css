@@ -1,63 +1,71 @@
-.outfits-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 24px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.filters {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.outfits-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 16px;
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 64px 24px;
-  text-align: center;
-
-  mat-icon {
-    font-size: 64px;
-    width: 64px;
-    height: 64px;
-    color: var(--text-secondary);
-    margin-bottom: 16px;
+/* Animaciones para las tarjetas */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-
-  p {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    margin-bottom: 24px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+.outfit-card {
+  animation: slideIn 0.6s ease-out;
+}
+
+/* Spinner personalizado */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Efectos hover mejorados */
+.group:hover .group-hover\:scale-105 {
+  transform: scale(1.05);
+}
+
+.group:hover .group-hover\:bg-opacity-40 {
+  background-opacity: 0.4;
+}
+
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+/* Transiciones suaves para todos los elementos interactivos */
+button,
+.outfit-card,
+.group {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
+  .max-w-7xl {
+    padding: 0 1rem;
   }
+}
 
-  .filters {
-    flex-direction: column;
-  }
+/* Focus states para accesibilidad */
+button:focus,
+textarea:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
 
-  .outfits-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
+/* Mejoras visuales para disabled states */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+textarea:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
 }

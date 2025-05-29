@@ -100,3 +100,196 @@ mat-card-actions {
   .outfit-card {
     max-width: 100%;
   }}
+.favoritos-tabs {
+  width: 100%;
+  background-color: #fafafa;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.carousel-container {
+  padding: 20px;
+  position: relative;
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.carousel-btn {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.carousel-btn:not([disabled]):hover {
+  background-color: #e0e0e0;
+  transform: scale(1.1);
+}
+
+.carousel-btn[disabled] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.carousel-content {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 16px;
+}
+
+.cards-carousel {
+  display: flex;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  gap: 16px;
+}
+
+.prenda-card {
+  flex: 0 0 calc(33.333% - 11px); /* 3 tarjetas por defecto */
+  max-width: 350px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: slideIn 0.5s ease-out;
+}
+
+.prenda-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.prenda-card mat-card-header {
+  position: relative;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+}
+
+.favorite-btn .favorito {
+  color: #e91e63;
+}
+
+.prenda-card img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.chips-container {
+  margin-top: 12px;
+}
+
+.chips-container mat-chip {
+  margin-right: 8px;
+  margin-bottom: 4px;
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ccc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background-color: #2196f3;
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background-color: #999;
+}
+
+.carousel-counter {
+  text-align: center;
+  margin-top: 16px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .prenda-card {
+    flex: 0 0 calc(50% - 8px); /* 2 tarjetas en tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .prenda-card {
+    flex: 0 0 100%; /* 1 tarjeta en móviles */
+  }
+
+  .carousel-controls {
+    gap: 8px;
+  }
+
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .prenda-card img {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-container {
+    padding: 10px;
+  }
+
+  .prenda-card {
+    margin: 0;
+  }
+
+  .prenda-card img {
+    height: 200px;
+  }
+}
+
+/* Animaciones adicionales */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+mat-card {
+  animation: slideIn 0.5s ease-out;
+}
+
+/* Estilos específicos que pueden ser difíciles de lograr con Tailwind */
+.mat-mdc-card-image {
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: calc(100% + 32px) !important;
+  margin: 0 -16px !important;
+}

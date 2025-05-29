@@ -1,61 +1,56 @@
-import { Injectable, signal } from "@angular/core"
+import { Injectable } from "@angular/core"
+import {  HttpClient, HttpParams } from "@angular/common/http"
+import type { Observable } from "rxjs"
 import type { Outfit } from "../models/outfit.model"
 
 @Injectable({
   providedIn: "root",
 })
 export class OutfitService {
-  private outfitsSignal = signal<Outfit[]>([
-    {
-      id: "o1",
-      nombre: "Casual de oficina",
-      ocasion: "Trabajo",
-      temporada: ["Primavera", "Otoño"],
-      prendas: ["p1", "p2"],
-      imagen: "/assets/images/business-casual-outfit.png",
-      fechaCreacion: "2024-03-15",
-      favorito: true,
-      notas: "Perfecto para días de oficina",
-    },
-    {
-      id: "o2",
-      nombre: "Fin de semana",
-      ocasion: "Casual",
-      temporada: ["Primavera", "Verano"],
-      prendas: ["p2"],
-      imagen: "/assets/images/weekend-casual-outfit.png",
-      fechaCreacion: "2024-03-20",
-      favorito: false,
-      notas: "Cómodo para paseos de fin de semana",
-    },
-  ])
+  private url = "http://localhost:8080"
 
-  get outfits() {
-    return this.outfitsSignal.asReadonly()
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Creates a new outfit based on the provided description
+   * @param description The description for the new outfit
+   * @returns An Observable with the created outfit
+   */
+  generateOutfit(description: string): Observable<Outfit> {
+    const token = localStorage.getItem("token")
+    return this.http.post<Outfit>(`${this.url}/newOutfit`, description, {
+      headers: {
+        authorization: `Bearer ${token}`,
+        "Content-Type": "text/plain",
+      },
+    })
   }
 
-  agregarOutfit(outfit: Omit<Outfit, "id" | "fechaCreacion">): void {
-    const nuevoOutfit: Outfit = {
-      ...outfit,
-      id: this.generateId(),
-      fechaCreacion: new Date().toISOString(),
-    }
-    this.outfitsSignal.update((outfits) => [...outfits, nuevoOutfit])
+  /**
+   * Changes the favorite status of an outfit
+   * @param outfitId The ID of the outfit to change favorite status
+   * @returns An Observable with the updated outfit
+   */
+  changeFavoriteOutfit(outfitId: string): Observable<Outfit> {
+    const token = localStorage.getItem("token")
+    const param = new HttpParams().set("id", outfitId)
+    return this.http.post<Outfit>(`${this.url}/changeFavoriteOutfit?${param}`, undefined, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
   }
 
-  actualizarOutfit(id: string, outfit: Partial<Outfit>): void {
-    this.outfitsSignal.update((outfits) => outfits.map((o) => (o.id === id ? { ...o, ...outfit } : o)))
-  }
-
-  eliminarOutfit(id: string): void {
-    this.outfitsSignal.update((outfits) => outfits.filter((o) => o.id !== id))
-  }
-
-  toggleFavorito(id: string): void {
-    this.outfitsSignal.update((outfits) => outfits.map((o) => (o.id === id ? { ...o, favorito: !o.favorito } : o)))
-  }
-
-  private generateId(): string {
-    return Math.random().toString(36).substring(2, 9)
+  /**
+   * Gets all outfits for the current user
+   * @returns An Observable with a list of outfits
+   */
+  getOutfitsByUser(): Observable<Outfit[]> {
+    const token = localStorage.getItem("token")
+    return this.http.get<Outfit[]>(`${this.url}/getOutfitByUser`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
   }
 }

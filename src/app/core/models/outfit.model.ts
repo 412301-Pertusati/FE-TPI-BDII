@@ -1,11 +1,9 @@
+
+import { Prenda } from './prenda.model';
+interface ClothesResponseDTO extends Prenda {}
+
 export interface Outfit {
   id: string
-  nombre: string
-  ocasion: string
-  temporada: string[]
-  prendas: string[]
-  imagen: string
-  fechaCreacion: string
-  favorito: boolean
-  notas?: string
+  outfit: ClothesResponseDTO[]
+  favorite: boolean
 }
