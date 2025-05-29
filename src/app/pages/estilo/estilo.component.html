@@ -15,46 +15,29 @@
 
         <div class="section">
           <h3 class="section-title">Colores frecuentes</h3>
-          <div class="chips-container">
-            <mat-chip-set>
-              <mat-chip
-                *ngFor="let color of datos?.coloresFrecuentes">
-                {{ color }}
-              </mat-chip>
-            </mat-chip-set>
+          <div class="chips-container ">
+            <div class="bg-violet-100 text-sm py-1 px-3 rounded-full" *ngFor="let color of datos?.coloresFrecuentes" > {{color}} </div>
           </div>
         </div>
 
         <div class="section">
           <h3 class="section-title">Estilos frecuentes</h3>
           <div class="chips-container">
-            <mat-chip-set>
-              <mat-chip *ngFor="let estilo of datos?.estilosFrecuentes">
-                {{ estilo }}
-              </mat-chip>
-            </mat-chip-set>
+            <div class="bg-sky-200 text-sm py-1 px-3 rounded-full" *ngFor="let estilo of datos?.estilosFrecuentes" > {{estilo}} </div>
           </div>
         </div>
 
         <div class="section">
           <h3 class="section-title">Patrones frecuentes</h3>
           <div class="chips-container">
-            <mat-chip-set>
-              <mat-chip *ngFor="let patron of datos?.patronesFrecuentes">
-                {{ patron }}
-              </mat-chip>
-            </mat-chip-set>
+            <div class="bg-stone-200 text-sm py-1 px-3 rounded-full" *ngFor="let patron of datos?.patronesFrecuentes" > {{patron}} </div>
           </div>
         </div>
 
         <div class="section">
           <h3 class="section-title">Prendas favoritas</h3>
           <div class="chips-container">
-            <mat-chip-set>
-              <mat-chip *ngFor="let prenda of datos?.prendasFavoritas?.porTipo | keyvalue">
-                {{ prenda.key }}
-              </mat-chip>
-            </mat-chip-set>
+            <div class="bg-orange-100 text-sm py-1 px-3 rounded-full" *ngFor="let prenda of datos?.prendasFavoritas?.porTipo | keyvalue"  > {{prenda.key}} </div>
           </div>
         </div>
 

@@ -1,242 +1,467 @@
-<div class="w-full bg-gray-50 rounded-lg overflow-hidden">
+<!--<div class="w-full bg-gray-50 rounded-lg overflow-hidden">-->
+<!--  <mat-tab-group (selectedTabChange)="onTabChange($event)">-->
+
+<!--    &lt;!&ndash; Tab de Prendas &ndash;&gt;-->
+<!--    <mat-tab label="Prendas">-->
+<!--      <div class="p-4 md:p-6 relative" (window:resize)="onResize()">-->
+
+<!--        &lt;!&ndash; Mensaje si no hay prendas favoritas &ndash;&gt;-->
+<!--        <div *ngIf="prendasFavoritas.length === 0" class="text-center py-12">-->
+<!--          <mat-icon class="text-6xl text-gray-400 mb-4">favorite_border</mat-icon>-->
+<!--          <h3 class="text-xl text-gray-600 mb-2">No tienes prendas favoritas</h3>-->
+<!--          <p class="text-gray-500">Marca algunas prendas como favoritas para verlas aquí</p>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Carrusel de prendas &ndash;&gt;-->
+<!--        <div *ngIf="prendasFavoritas.length > 0">-->
+<!--          <div class="flex items-center gap-4 mb-5">-->
+<!--            <button-->
+<!--              mat-icon-button-->
+<!--              class="flex-shrink-0 w-12 h-12 bg-gray-100 hover:bg-gray-200 transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"-->
+<!--              [disabled]="!canGoPrevPrendas"-->
+<!--              (click)="prevSlidePrendas()"-->
+<!--            >-->
+<!--              <mat-icon>chevron_left</mat-icon>-->
+<!--            </button>-->
+
+<!--            <div class="flex-1 overflow-hidden rounded-lg shadow-md bg-gradient-to-br from-gray-50 to-blue-50 p-4">-->
+<!--              <div class="flex transition-transform duration-500 ease-out gap-4"-->
+<!--                   [style.transform]="'translateX(-' + (currentIndexPrendas * (100 / itemsPerViewPrendas)) + '%)'">-->
+
+<!--                <mat-card-->
+<!--                  *ngFor="let prenda of prendasFavoritas; trackBy: trackByPrenda"-->
+<!--                  class="flex-shrink-0 max-w-[350px] transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"-->
+<!--                  [ngClass]="{-->
+<!--                    'w-full': itemsPerViewPrendas === 1,-->
+<!--                    'w-[calc(50%-8px)]': itemsPerViewPrendas === 2,-->
+<!--                    'w-[calc(33.333%-11px)]': itemsPerViewPrendas === 3-->
+<!--                  }"-->
+<!--                >-->
+<!--                  <mat-card-header class="relative justify-between">-->
+<!--                    <mat-card-title>{{prenda.tipo}}</mat-card-title>-->
+<!--                    <mat-card-subtitle>{{prenda.estilo}} - {{prenda.color}}</mat-card-subtitle>-->
+<!--                    <button-->
+<!--                      mat-icon-button-->
+<!--                      (click)="onToggleFavoritoPrenda(prenda)"-->
+<!--                      class="absolute top-2 right-2 bg-white bg-opacity-90 backdrop-blur-sm"-->
+<!--                    >-->
+<!--                      <mat-icon [ngClass]="{'text-pink-600': prenda.favorite}">-->
+<!--                        {{prenda.favorite ? 'favorite' : 'favorite_border'}}-->
+<!--                      </mat-icon>-->
+<!--                    </button>-->
+<!--                  </mat-card-header>-->
+
+<!--                  <img-->
+<!--                    mat-card-image-->
+<!--                    [src]="prenda.urlFoto"-->
+<!--                    [alt]="prenda.tipo"-->
+<!--                    class="h-48 object-cover"-->
+<!--                  >-->
+
+<!--                  <mat-card-content>-->
+<!--                    <div class="mt-3">-->
+<!--                      <mat-chip-set>-->
+<!--                        <mat-chip-->
+<!--                          class="mr-2 mb-1"-->
+<!--                        >-->
+<!--                          {{prenda.estacion}}-->
+<!--                        </mat-chip>-->
+<!--                      </mat-chip-set>-->
+<!--                    </div>-->
+<!--                  </mat-card-content>-->
+
+
+<!--                </mat-card>-->
+
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <button-->
+<!--              mat-icon-button-->
+<!--              class="flex-shrink-0 w-12 h-12 bg-gray-100 hover:bg-gray-200 transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"-->
+<!--              [disabled]="!canGoNextPrendas"-->
+<!--              (click)="nextSlidePrendas()"-->
+<!--            >-->
+<!--              <mat-icon>chevron_right</mat-icon>-->
+<!--            </button>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; Indicadores de posición para prendas &ndash;&gt;-->
+<!--          <div class="flex justify-center gap-2 mt-5" *ngIf="prendasFavoritas.length > itemsPerViewPrendas">-->
+<!--            <button-->
+<!--              *ngFor="let slide of [].constructor(totalSlidesPrendas); let i = index"-->
+<!--              class="w-3 h-3 rounded-full border-0 transition-all duration-300 cursor-pointer"-->
+<!--              [ngClass]="{-->
+<!--                'bg-blue-500 transform scale-110': i === (currentSlidePrendas - 1),-->
+<!--                'bg-gray-300 hover:bg-gray-400': i !== (currentSlidePrendas - 1)-->
+<!--              }"-->
+<!--              (click)="goToSlidePrendas(i * itemsPerViewPrendas)"-->
+<!--            ></button>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; Contador de elementos para prendas &ndash;&gt;-->
+<!--          <div class="text-center mt-4 text-sm text-gray-600">-->
+<!--            Mostrando {{currentIndexPrendas + 1}}-{{Math.min(currentIndexPrendas + itemsPerViewPrendas, prendasFavoritas.length)}}-->
+<!--            de {{prendasFavoritas.length}} prendas favoritas-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--      </div>-->
+<!--    </mat-tab>-->
+
+<!--    &lt;!&ndash; Tab de Outfits &ndash;&gt;-->
+<!--    <mat-tab label="Outfits">-->
+<!--      <div class="p-4 md:p-6 relative" (window:resize)="onResize()">-->
+
+<!--        &lt;!&ndash; Mensaje si no hay outfits favoritos &ndash;&gt;-->
+<!--        <div *ngIf="outfitsFavoritos.length === 0" class="text-center py-12">-->
+<!--          <mat-icon class="text-6xl text-gray-400 mb-4">favorite_border</mat-icon>-->
+<!--          <h3 class="text-xl text-gray-600 mb-2">No tienes outfits favoritos</h3>-->
+<!--          <p class="text-gray-500">Marca algunos outfits como favoritos para verlos aquí</p>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Carrusel de outfits &ndash;&gt;-->
+<!--        <div *ngIf="outfitsFavoritos.length > 0">-->
+<!--          <div class="flex items-center gap-4 mb-5">-->
+<!--            <button-->
+<!--              mat-icon-button-->
+<!--              class="flex-shrink-0 w-12 h-12 bg-gray-100 hover:bg-gray-200 transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"-->
+<!--              [disabled]="!canGoPrevOutfits"-->
+<!--              (click)="prevSlideOutfits()"-->
+<!--            >-->
+<!--              <mat-icon>chevron_left</mat-icon>-->
+<!--            </button>-->
+
+<!--            <div class="flex-1 overflow-hidden rounded-lg shadow-md bg-gradient-to-br from-gray-50 to-purple-50 p-4">-->
+<!--              <div class="flex transition-transform duration-500 ease-out gap-4"-->
+<!--                   [style.transform]="'translateX(-' + (currentIndexOutfits * (100 / itemsPerViewOutfits)) + '%)'">-->
+
+<!--                <mat-card-->
+<!--                  *ngFor="let outfit of outfitsFavoritos; trackBy: trackByOutfit"-->
+<!--                  class="flex-shrink-0 max-w-[350px] transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"-->
+<!--                  [ngClass]="{-->
+<!--                    'w-full': itemsPerViewOutfits === 1,-->
+<!--                    'w-[calc(50%-8px)]': itemsPerViewOutfits === 2,-->
+<!--                    'w-[calc(33.333%-11px)]': itemsPerViewOutfits === 3-->
+<!--                  }"-->
+<!--                >-->
+<!--                  <mat-card-header class="relative">-->
+<!--                    <mat-card-title>Outfit #{{outfit.id}}</mat-card-title>-->
+<!--                    <mat-card-subtitle>{{outfit.outfit.length}} prendas</mat-card-subtitle>-->
+<!--                    <button-->
+<!--                      mat-icon-button-->
+<!--                      (click)="onToggleFavoritoOutfit(outfit)"-->
+<!--                      class="absolute top-2 right-2 bg-white bg-opacity-90 backdrop-blur-sm"-->
+<!--                    >-->
+<!--                      <mat-icon [ngClass]="{'text-pink-600': outfit.favorite}">-->
+<!--                        {{outfit.favorite ? 'favorite' : 'favorite_border'}}-->
+<!--                      </mat-icon>-->
+<!--                    </button>-->
+<!--                  </mat-card-header>-->
+
+<!--                  <mat-card-content>-->
+<!--                    <div class="grid grid-cols-2 gap-2 mt-3">-->
+<!--                      <div-->
+<!--                        *ngFor="let prenda of outfit.outfit.slice(0, 4); let i = index"-->
+<!--                        class="relative"-->
+<!--                      >-->
+<!--                        <img-->
+<!--                          [src]="prenda.urlFoto || '/placeholder.svg?height=80&width=80'"-->
+<!--                          [alt]="prenda.tipo"-->
+<!--                          class="w-full h-20 object-cover rounded"-->
+<!--                        >-->
+<!--                        <div *ngIf="i === 3 && outfit.outfit.length > 4"-->
+<!--                             class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded">-->
+<!--                          <span class="text-white text-sm font-bold">+{{outfit.outfit.length - 4}}</span>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+<!--                    <div class="mt-3">-->
+<!--                      <div class="flex flex-wrap gap-1">-->
+<!--                        <span-->
+<!--                          *ngFor="let prenda of outfit.outfit.slice(0, 3)"-->
+<!--                          class="text-xs bg-gray-200 px-2 py-1 rounded"-->
+<!--                        >-->
+<!--                          {{prenda.tipo}}-->
+<!--                        </span>-->
+<!--                        <span *ngIf="outfit.outfit.length > 3" class="text-xs text-gray-500">-->
+<!--                          +{{outfit.outfit.length - 3}} más-->
+<!--                        </span>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </mat-card-content>-->
+
+<!--                  <mat-card-actions>-->
+<!--                    <button mat-button (click)="onEditarOutfit(outfit)" class="flex items-center">-->
+<!--                      <mat-icon class="mr-1">edit</mat-icon>-->
+<!--                      Editar-->
+<!--                    </button>-->
+<!--                    <button mat-button color="warn" (click)="onEliminarOutfit(outfit)" class="flex items-center">-->
+<!--                      <mat-icon class="mr-1">delete</mat-icon>-->
+<!--                      Eliminar-->
+<!--                    </button>-->
+<!--                  </mat-card-actions>-->
+<!--                </mat-card>-->
+
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <button-->
+<!--              mat-icon-button-->
+<!--              class="flex-shrink-0 w-12 h-12 bg-gray-100 hover:bg-gray-200 transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"-->
+<!--              [disabled]="!canGoNextOutfits"-->
+<!--              (click)="nextSlideOutfits()"-->
+<!--            >-->
+<!--              <mat-icon>chevron_right</mat-icon>-->
+<!--            </button>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; Indicadores de posición para outfits &ndash;&gt;-->
+<!--          <div class="flex justify-center gap-2 mt-5" *ngIf="outfitsFavoritos.length > itemsPerViewOutfits">-->
+<!--            <button-->
+<!--              *ngFor="let slide of [].constructor(totalSlidesOutfits); let i = index"-->
+<!--              class="w-3 h-3 rounded-full border-0 transition-all duration-300 cursor-pointer"-->
+<!--              [ngClass]="{-->
+<!--                'bg-purple-500 transform scale-110': i === (currentSlideOutfits - 1),-->
+<!--                'bg-gray-300 hover:bg-gray-400': i !== (currentSlideOutfits - 1)-->
+<!--              }"-->
+<!--              (click)="goToSlideOutfits(i * itemsPerViewOutfits)"-->
+<!--            ></button>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; Contador de elementos para outfits &ndash;&gt;-->
+<!--          <div class="text-center mt-4 text-sm text-gray-600">-->
+<!--            Mostrando {{currentIndexOutfits + 1}}-{{Math.min(currentIndexOutfits + itemsPerViewOutfits, outfitsFavoritos.length)}}-->
+<!--            de {{outfitsFavoritos.length}} outfits favoritos-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--      </div>-->
+<!--    </mat-tab>-->
+
+<!--  </mat-tab-group>-->
+<!--</div>-->
+
+<div class="w-full  rounded-lg overflow-hidden">
   <mat-tab-group (selectedTabChange)="onTabChange($event)">
-    
+
     <!-- Tab de Prendas -->
     <mat-tab label="Prendas">
-      <div class="p-4 md:p-6 relative" (window:resize)="onResize()">
-        
+      <div class="p-4 md:p-6">
+
         <!-- Mensaje si no hay prendas favoritas -->
         <div *ngIf="prendasFavoritas.length === 0" class="text-center py-12">
-          <mat-icon class="text-6xl text-gray-400 mb-4">favorite_border</mat-icon>
-          <h3 class="text-xl text-gray-600 mb-2">No tienes prendas favoritas</h3>
-          <p class="text-gray-500">Marca algunas prendas como favoritas para verlas aquí</p>
+          <div class="w-16 h-16 mx-auto mb-4 bg-warm-200 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-warm-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl text-warm-800 mb-2 font-semibold">No tienes prendas favoritas</h3>
+          <p class="text-warm-600">Marca algunas prendas como favoritas para verlas aquí</p>
         </div>
 
-        <!-- Carrusel de prendas -->
-        <div *ngIf="prendasFavoritas.length > 0">
-          <div class="flex items-center gap-4 mb-5">
-            <button 
-              mat-icon-button 
-              class="flex-shrink-0 w-12 h-12 bg-gray-100 hover:bg-gray-200 transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"
-              [disabled]="!canGoPrevPrendas"
-              (click)="prevSlidePrendas()"
-            >
-              <mat-icon>chevron_left</mat-icon>
-            </button>
-            
-            <div class="flex-1 overflow-hidden rounded-lg shadow-md bg-gradient-to-br from-gray-50 to-blue-50 p-4">
-              <div class="flex transition-transform duration-500 ease-out gap-4"
-                   [style.transform]="'translateX(-' + (currentIndexPrendas * (100 / itemsPerViewPrendas)) + '%)'">
-                
-                <mat-card 
-                  *ngFor="let prenda of prendasFavoritas; trackBy: trackByPrenda" 
-                  class="flex-shrink-0 max-w-[350px] transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                  [ngClass]="{
-                    'w-full': itemsPerViewPrendas === 1,
-                    'w-[calc(50%-8px)]': itemsPerViewPrendas === 2,
-                    'w-[calc(33.333%-11px)]': itemsPerViewPrendas === 3
-                  }"
-                >
-                  <mat-card-header class="relative justify-between">
-                    <mat-card-title>{{prenda.tipo}}</mat-card-title>
-                    <mat-card-subtitle>{{prenda.estilo}} - {{prenda.color}}</mat-card-subtitle>
-                    <button 
-                      mat-icon-button 
-                      (click)="onToggleFavoritoPrenda(prenda)" 
-                      class="absolute top-2 right-2 bg-white bg-opacity-90 backdrop-blur-sm"
-                    >
-                      <mat-icon [ngClass]="{'text-pink-600': prenda.favorite}">
-                        {{prenda.favorite ? 'favorite' : 'favorite_border'}}
-                      </mat-icon>
-                    </button>
-                  </mat-card-header>
+        <!-- Grid de prendas favoritas -->
+        <div *ngIf="prendasFavoritas.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div class="lg:min-w-xs lg:max-w-xs mx-auto" *ngFor="let cloth of prendasFavoritas; trackBy: trackByPrenda">
+            <div class="bg-[#faf7f2] rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
 
-                  <img 
-                    mat-card-image 
-                    [src]="prenda.urlFoto" 
-                    [alt]="prenda.tipo"
-                    class="h-48 object-cover"
+              <!-- Contenedor de imagen con botones -->
+              <div class="relative">
+                <!-- Imagen con tamaño fijo y cover -->
+                <div class="w-full h-48 sm:h-56 md:h-64 lg:h-72 overflow-hidden">
+                  <img
+                    [src]="cloth.urlFoto"
+                    [alt]="cloth.tipo"
+                    class="w-full h-full object-cover"
                   >
+                </div>
 
-                  <mat-card-content>
-                    <div class="mt-3">
-                      <mat-chip-set>
-                        <mat-chip 
-                          class="mr-2 mb-1"
-                        >
-                          {{prenda.estacion}}
-                        </mat-chip>
-                      </mat-chip-set>
-                    </div>
-                  </mat-card-content>
+                <!-- Botones de acción en la esquina superior derecha -->
+                <div class="absolute top-3 right-3 flex space-x-2">
+                  <button
+                    *ngIf="cloth.favorite"
+                    (click)="onToggleFavoritoPrenda(cloth)"
+                    class="p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white transition-all duration-200 group"
+                  >
+                    <svg class="w-4 h-4 text-red-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                    </svg>
+                  </button>
+                  <button
+                    *ngIf="!cloth.favorite"
+                    (click)="onToggleFavoritoPrenda(cloth)"
+                    class="p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white transition-all duration-200 group"
+                  >
+                    <svg class="w-4 h-4 text-gray-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                  </button>
 
-                 
-                </mat-card>
-                
+                  <!-- Botón editar -->
+                  <button class="p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white transition-all duration-200 group">
+                    <svg class="w-4 h-4 text-[#737A5D] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                  </button>
+
+                  <!-- Botón eliminar -->
+                  <button class="p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white transition-all duration-200 group" (click)="delete(cloth.id)">
+                    <svg class="w-4 h-4 text-gray-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Información de la prenda -->
+              <div class="p-4">
+                <h3 class="text-lg font-semibold text-warm-800 mb-2">{{cloth.tipo}} {{cloth.color}}</h3>
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span class="px-3 py-1 bg-warm-200 bg-[#e8e1d5] text-stone-800 text-xs sm:text-sm rounded-full font-medium"> {{cloth.estacion}} </span>
+                  <span class="px-3 py-1 bg-warm-200 bg-violet-100 text-stone-800 text-xs sm:text-sm rounded-full font-medium"> {{cloth.patron}} </span>
+                  <span class="px-3 py-1 bg-warm-200 bg-sky-100 text-stone-800 text-xs sm:text-sm rounded-full font-medium"> {{cloth.estilo}} </span>
+
+                </div>
               </div>
             </div>
-            
-            <button 
-              mat-icon-button 
-              class="flex-shrink-0 w-12 h-12 bg-gray-100 hover:bg-gray-200 transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"
-              [disabled]="!canGoNextPrendas"
-              (click)="nextSlidePrendas()"
-            >
-              <mat-icon>chevron_right</mat-icon>
-            </button>
-          </div>
-          
-          <!-- Indicadores de posición para prendas -->
-          <div class="flex justify-center gap-2 mt-5" *ngIf="prendasFavoritas.length > itemsPerViewPrendas">
-            <button 
-              *ngFor="let slide of [].constructor(totalSlidesPrendas); let i = index"
-              class="w-3 h-3 rounded-full border-0 transition-all duration-300 cursor-pointer"
-              [ngClass]="{
-                'bg-blue-500 transform scale-110': i === (currentSlidePrendas - 1),
-                'bg-gray-300 hover:bg-gray-400': i !== (currentSlidePrendas - 1)
-              }"
-              (click)="goToSlidePrendas(i * itemsPerViewPrendas)"
-            ></button>
-          </div>
-          
-          <!-- Contador de elementos para prendas -->
-          <div class="text-center mt-4 text-sm text-gray-600">
-            Mostrando {{currentIndexPrendas + 1}}-{{Math.min(currentIndexPrendas + itemsPerViewPrendas, prendasFavoritas.length)}} 
-            de {{prendasFavoritas.length}} prendas favoritas
           </div>
         </div>
-        
       </div>
     </mat-tab>
 
     <!-- Tab de Outfits -->
     <mat-tab label="Outfits">
-      <div class="p-4 md:p-6 relative" (window:resize)="onResize()">
-        
+      <div class="p-4 md:p-6">
+
         <!-- Mensaje si no hay outfits favoritos -->
         <div *ngIf="outfitsFavoritos.length === 0" class="text-center py-12">
-          <mat-icon class="text-6xl text-gray-400 mb-4">favorite_border</mat-icon>
-          <h3 class="text-xl text-gray-600 mb-2">No tienes outfits favoritos</h3>
-          <p class="text-gray-500">Marca algunos outfits como favoritos para verlos aquí</p>
+          <div class="w-16 h-16 mx-auto mb-4 bg-warm-200 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-warm-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl text-warm-800 mb-2 font-semibold">No tienes outfits favoritos</h3>
+          <p class="text-warm-600">Marca algunos outfits como favoritos para verlos aquí</p>
         </div>
 
-        <!-- Carrusel de outfits -->
-        <div *ngIf="outfitsFavoritos.length > 0">
-          <div class="flex items-center gap-4 mb-5">
-            <button 
-              mat-icon-button 
-              class="flex-shrink-0 w-12 h-12 bg-gray-100 hover:bg-gray-200 transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"
-              [disabled]="!canGoPrevOutfits"
-              (click)="prevSlideOutfits()"
-            >
-              <mat-icon>chevron_left</mat-icon>
-            </button>
-            
-            <div class="flex-1 overflow-hidden rounded-lg shadow-md bg-gradient-to-br from-gray-50 to-purple-50 p-4">
-              <div class="flex transition-transform duration-500 ease-out gap-4"
-                   [style.transform]="'translateX(-' + (currentIndexOutfits * (100 / itemsPerViewOutfits)) + '%)'">
-                
-                <mat-card 
-                  *ngFor="let outfit of outfitsFavoritos; trackBy: trackByOutfit" 
-                  class="flex-shrink-0 max-w-[350px] transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                  [ngClass]="{
-                    'w-full': itemsPerViewOutfits === 1,
-                    'w-[calc(50%-8px)]': itemsPerViewOutfits === 2,
-                    'w-[calc(33.333%-11px)]': itemsPerViewOutfits === 3
-                  }"
-                >
-                  <mat-card-header class="relative">
-                    <mat-card-title>Outfit #{{outfit.id}}</mat-card-title>
-                    <mat-card-subtitle>{{outfit.outfit.length}} prendas</mat-card-subtitle>
-                    <button 
-                      mat-icon-button 
-                      (click)="onToggleFavoritoOutfit(outfit)" 
-                      class="absolute top-2 right-2 bg-white bg-opacity-90 backdrop-blur-sm"
-                    >
-                      <mat-icon [ngClass]="{'text-pink-600': outfit.favorite}">
-                        {{outfit.favorite ? 'favorite' : 'favorite_border'}}
-                      </mat-icon>
-                    </button>
-                  </mat-card-header>
+        <!-- Grid de outfits favoritos -->
+        <div *ngIf="outfitsFavoritos.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div class="lg:min-w-xs lg:max-w-xs mx-auto" *ngFor="let outfit of outfitsFavoritos; let outfitIndex = index; trackBy: trackByOutfit">
+            <div class="bg-[#faf7f2] rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
 
-                  <mat-card-content>
-                    <div class="grid grid-cols-2 gap-2 mt-3">
-                      <div 
-                        *ngFor="let prenda of outfit.outfit.slice(0, 4); let i = index" 
-                        class="relative"
+              <!-- Contenedor de carrusel con botones -->
+              <div class="relative">
+                <!-- Carrusel de imágenes con tamaño fijo -->
+                <div class="w-full h-48 sm:h-56 md:h-64 lg:h-72 overflow-hidden relative">
+
+                  <!-- Contenedor del carrusel -->
+                  <div class="flex transition-transform duration-300 ease-in-out h-full"
+                       [style.transform]="'translateX(-' + getCurrentSlide(outfitIndex) * 100 + '%)'">
+                    <div *ngFor="let prenda of outfit.outfit; let i = index"
+                         class="w-full h-full flex-shrink-0">
+                      <img
+                        [src]="prenda.urlFoto"
+                        [alt]="prenda.tipo"
+                        class="w-full h-full object-cover"
                       >
-                        <img 
-                          [src]="prenda.urlFoto || '/placeholder.svg?height=80&width=80'" 
-                          [alt]="prenda.tipo"
-                          class="w-full h-20 object-cover rounded"
-                        >
-                        <div *ngIf="i === 3 && outfit.outfit.length > 4" 
-                             class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded">
-                          <span class="text-white text-sm font-bold">+{{outfit.outfit.length - 4}}</span>
-                        </div>
-                      </div>
                     </div>
-                    
-                    <div class="mt-3">
-                      <div class="flex flex-wrap gap-1">
-                        <span 
-                          *ngFor="let prenda of outfit.outfit.slice(0, 3)" 
-                          class="text-xs bg-gray-200 px-2 py-1 rounded"
-                        >
-                          {{prenda.tipo}}
-                        </span>
-                        <span *ngIf="outfit.outfit.length > 3" class="text-xs text-gray-500">
-                          +{{outfit.outfit.length - 3}} más
-                        </span>
-                      </div>
-                    </div>
-                  </mat-card-content>
+                  </div>
 
-                  <mat-card-actions>
-                    <button mat-button (click)="onEditarOutfit(outfit)" class="flex items-center">
-                      <mat-icon class="mr-1">edit</mat-icon>
-                      Editar
+                  <!-- Botones de navegación del carrusel -->
+                  <button
+                    *ngIf="outfit.outfit.length > 1"
+                    (click)="prevSlideOutfit(outfitIndex)"
+                    class="absolute left-2 top-1/2 transform -translate-y-1/2 p-1 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-all duration-200">
+                    <svg class="w-4 h-4 text-warm-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                  </button>
+
+                  <button
+                    *ngIf="outfit.outfit.length > 1"
+                    (click)="nextSlideOutfit(outfitIndex)"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-all duration-200">
+                    <svg class="w-4 h-4 text-warm-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </button>
+
+                  <!-- Indicadores del carrusel -->
+                  <div *ngIf="outfit.outfit.length > 1" class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+                    <button
+                      *ngFor="let prenda of outfit.outfit; let i = index"
+                      (click)="goToSlideOutfit(outfitIndex, i)"
+                      class="w-2 h-2 rounded-full transition-all duration-200"
+                      [ngClass]="{
+                        'bg-white': i === getCurrentSlide(outfitIndex),
+                        'bg-white/50': i !== getCurrentSlide(outfitIndex)
+                      }">
                     </button>
-                    <button mat-button color="warn" (click)="onEliminarOutfit(outfit)" class="flex items-center">
-                      <mat-icon class="mr-1">delete</mat-icon>
-                      Eliminar
+                  </div>
+
+                  <!-- Botones de acción en la esquina superior derecha -->
+                  <div class="absolute top-3 right-3 flex space-x-2">
+                    <button
+                      *ngIf="outfit.favorite"
+                      (click)="onToggleFavoritoOutfit(outfit)"
+                      class="p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white transition-all duration-200 group"
+                    >
+                      <svg class="w-4 h-4 text-red-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                      </svg>
                     </button>
-                  </mat-card-actions>
-                </mat-card>
-                
+                    <button
+                      *ngIf="!outfit.favorite"
+                      (click)="onToggleFavoritoOutfit(outfit)"
+                      class="p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white transition-all duration-200 group"
+                    >
+                      <svg class="w-4 h-4 text-gray-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                      </svg>
+                    </button>
+
+                    <!-- Botón editar -->
+                    <button
+                      (click)="onEditarOutfit(outfit)"
+                      class="p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white transition-all duration-200 group">
+                      <svg class="w-4 h-4 text-[#737A5D] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                      </svg>
+                    </button>
+
+                    <!-- Botón eliminar -->
+                    <button
+                      (click)="onEliminarOutfit(outfit)"
+                      class="p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-white transition-all duration-200 group">
+                      <svg class="w-4 h-4 text-gray-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Información del outfit -->
+              <div class="p-4">
+                <h3 class="text-lg font-semibold text-warm-800 mb-2">{{outfit.id}}</h3>
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span class="px-3 py-1 bg-warm-200 bg-[#e8e1d5] text-stone-800 text-xs rounded-full">{{outfit.outfit.length}} prendas</span>
+                  <span
+                    *ngFor="let prenda of outfit.outfit.slice(0, 2)"
+                    class="px-3 py-1 bg-warm-200 bg-sky-100 text-stone-800 text-xs rounded-full">
+                    {{prenda.tipo}}
+                  </span>
+                  <span
+                    *ngIf="outfit.outfit.length > 2"
+                    class="px-3 py-1 bg-warm-200 bg-violet-100 text-stone-800  text-xs rounded-full">
+                    +{{outfit.outfit.length - 2}} más
+                  </span>
+                </div>
               </div>
             </div>
-            
-            <button 
-              mat-icon-button 
-              class="flex-shrink-0 w-12 h-12 bg-gray-100 hover:bg-gray-200 transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"
-              [disabled]="!canGoNextOutfits"
-              (click)="nextSlideOutfits()"
-            >
-              <mat-icon>chevron_right</mat-icon>
-            </button>
-          </div>
-          
-          <!-- Indicadores de posición para outfits -->
-          <div class="flex justify-center gap-2 mt-5" *ngIf="outfitsFavoritos.length > itemsPerViewOutfits">
-            <button 
-              *ngFor="let slide of [].constructor(totalSlidesOutfits); let i = index"
-              class="w-3 h-3 rounded-full border-0 transition-all duration-300 cursor-pointer"
-              [ngClass]="{
-                'bg-purple-500 transform scale-110': i === (currentSlideOutfits - 1),
-                'bg-gray-300 hover:bg-gray-400': i !== (currentSlideOutfits - 1)
-              }"
-              (click)="goToSlideOutfits(i * itemsPerViewOutfits)"
-            ></button>
-          </div>
-          
-          <!-- Contador de elementos para outfits -->
-          <div class="text-center mt-4 text-sm text-gray-600">
-            Mostrando {{currentIndexOutfits + 1}}-{{Math.min(currentIndexOutfits + itemsPerViewOutfits, outfitsFavoritos.length)}} 
-            de {{outfitsFavoritos.length}} outfits favoritos
           </div>
         </div>
-        
       </div>
     </mat-tab>
 

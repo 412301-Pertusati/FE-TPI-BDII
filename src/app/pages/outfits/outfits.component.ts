@@ -60,6 +60,7 @@ export class OutfitsComponent implements OnInit {
 
     this.outfitService.getOutfitsByUser().subscribe({
       next: (outfits) => {
+        outfits = outfits.reverse()
         this.outfits = outfits
         this.updateMaxIndex()
         this.loading = false
