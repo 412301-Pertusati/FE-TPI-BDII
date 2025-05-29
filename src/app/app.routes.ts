@@ -6,8 +6,7 @@ export const routes: Routes = [
   {
     path: "",
     component: LayoutComponent,
-    //canActivateChild: [AuthGuard],
-
+    canActivateChild: [AuthGuard],
     children: [
       {
         path: "armario",
@@ -32,7 +31,7 @@ export const routes: Routes = [
       },
     ],
   },
-  //{ path: 'landing', loadComponent: () => import("./pages/landing/landing.component").then((m) => m.LandingComponent),},
+  { path: 'landing', loadComponent: () => import("./pages/landing/landing.component").then((m) => m.LandingComponent),},
   { path: "login", loadComponent: () => import("./pages/login/login.component").then((m) => m.LoginComponent), },
   { path: "register", loadComponent: () => import("./pages/register/register.component").then((m) => m.RegisterComponent),},
   { path: "**", redirectTo: "" },

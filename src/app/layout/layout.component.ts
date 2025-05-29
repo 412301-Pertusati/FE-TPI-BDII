@@ -37,7 +37,7 @@ export class LayoutComponent {
   )
 
   ngOnInit() {
-    this.router.navigateByUrl("/landing")
+    this.router.navigateByUrl("/armario")
   }
 
 }

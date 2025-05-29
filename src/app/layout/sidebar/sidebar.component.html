@@ -1,34 +1,36 @@
-<mat-nav-list class="flex flex-col h-full"> 
 
+<mat-nav-list class="flex flex-col h-full">
+  <div class="flex h-full flex-col">
+    <div class="flex-1 flex flex-col">
+      <div class="gap-2 w-full bg-[#d5d5c1] p-4 flex justify-center">
+        <div class="relative w-10 h-10 rounded-full bg-[#4c583e] flex items-center justify-center">
+          <div class="w-4 h-4 bg-[#768064] rotate-45 flex items-center justify-center">
+            <div class="w-2 h-2 bg-[#dadec2] rounded-full"></div>
+          </div>
+        </div>
+        <h1 class="text-4xl ml-1 font-semibold leading-tight text-[#2f3e2e] text-center">
+          WithStyle
+        </h1>
+      </div>
 
-  <div class="gap-2 w-full bg-[#d5d5c1] p-4 flex justify-center">
-    <div class="relative w-10 h-10 rounded-full bg-[#4c583e] flex items-center justify-center">
-      <div class="w-4 h-4 bg-[#768064] rotate-45 flex items-center justify-center">
-        <div class="w-2 h-2 bg-[#dadec2] rounded-full"></div>
+      <div class="flex flex-col gap-1">
+        <a mat-list-item
+           *ngFor="let item of menuItems"
+           [routerLink]="item.path"
+           [ngClass]="['nav-item', isActive(item.path) ? 'active' : '']"
+           tabindex="0">
+          <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
+          <span matListItemTitle>{{item.title}}</span>
+        </a>
       </div>
     </div>
-    <h1 class="text-4xl ml-1 font-semibold leading-tight text-[#2f3e2e] text-center">
-      WithStyle
-    </h1>
+
+    <div class="logout px-2 pb-4 pt-2 border-t border-[#c5c5b0]">
+      <a mat-list-item (click)="logOut()" class="nav-item">
+        <mat-icon matListItemIcon>logout</mat-icon>
+        <span matListItemTitle>Log out</span>
+      </a>
+    </div>
   </div>
 
-  <div class="flex-1 flex flex-col space-y-1 pt-1">
-    <a mat-list-item
-      *ngFor="let item of menuItems"
-      [routerLink]="item.path"
-      [ngClass]="['nav-item', isActive(item.path) ? 'active' : '']"
-      tabindex="0">
-      <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
-      <span matListItemTitle>{{item.title}}</span>
-    </a>
-  </div>
-
-  
-
-  <div class="logout px-2 pb-4 pt-2 border-t border-[#c5c5b0]">
-    <a mat-list-item (click)="logOut()" class="nav-item">
-      <mat-icon matListItemIcon>logout</mat-icon>
-      <span matListItemTitle>Log out</span>
-    </a>
-  </div>
 </mat-nav-list>
