@@ -1,33 +1,242 @@
-<mat-card class="outfit-card">
-  <mat-card-header>
-    <mat-card-title>{{outfit.nombre}}</mat-card-title>
-    <mat-card-subtitle>{{outfit.ocasion}}</mat-card-subtitle>
-    <button mat-icon-button (click)="onToggleFavorito()" class="favorite-btn">
-      <mat-icon [class.favorito]="outfit.favorito">
-        {{outfit.favorito ? 'favorite' : 'favorite_border'}}
-      </mat-icon>
-    </button>
-  </mat-card-header>
-
-  <img mat-card-image [src]="outfit.imagen" [alt]="outfit.nombre">
-
-  <mat-card-content>
-    <div class="chips-container">
-      <mat-chip-set>
-        <mat-chip *ngFor="let temporada of outfit.temporada">{{temporada}}</mat-chip>
-      </mat-chip-set>
+<div class="min-h-screen bg-gray-50 p-4 md:p-6">
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Mis Outfits</h1>
+      <p class="text-gray-600">Crea y gestiona tus combinaciones de ropa</p>
     </div>
-    <p *ngIf="outfit.notas">{{outfit.notas}}</p>
-  </mat-card-content>
 
-  <mat-card-actions>
-    <button mat-button (click)="onEditar()">
-      <mat-icon>edit</mat-icon>
-      Editar
-    </button>
-    <button mat-button color="warn" (click)="onEliminar()">
-      <mat-icon>delete</mat-icon>
-      Eliminar
-    </button>
-  </mat-card-actions>
-</mat-card>
+    <!-- Formulario para generar nuevo outfit -->
+    <mat-card class="mb-8 bg-gradient-to-r from-blue-50 to-purple-50">
+      <mat-card-header>
+        <mat-card-title class="flex items-center">
+          <mat-icon class="mr-2 text-blue-600">auto_awesome</mat-icon>
+          Generar Nuevo Outfit
+        </mat-card-title>
+        <mat-card-subtitle>Describe el tipo de outfit que quieres y la IA lo creará para ti</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="flex flex-col md:flex-row gap-4 items-end">
+          <mat-form-field class="flex-1" appearance="outline">
+            <mat-label>Descripción del outfit</mat-label>
+            <textarea 
+              matInput 
+              [(ngModel)]="newOutfitDescription"
+              placeholder="Ej: Un outfit casual para el fin de semana, algo elegante para una cena, ropa deportiva para el gimnasio..."
+              rows="3"
+              [disabled]="generatingOutfit"
+              (keydown)="onKeyDown($event)"
+            ></textarea>
+            <mat-hint>Presiona Ctrl+Enter para generar</mat-hint>
+          </mat-form-field>
+          
+          <button 
+            mat-raised-button 
+            color="primary"
+            (click)="generateOutfit()"
+            [disabled]="generatingOutfit || !newOutfitDescription.trim()"
+            class="h-14 px-8"
+          >
+            <mat-icon *ngIf="!generatingOutfit" class="mr-2">auto_awesome</mat-icon>
+            <mat-spinner *ngIf="generatingOutfit" diameter="20" class="mr-2"></mat-spinner>
+            {{ generatingOutfit ? 'Generando...' : 'Generar Outfit' }}
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Error message -->
+    <div *ngIf="error" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+      <div class="flex items-center">
+        <mat-icon class="text-red-600 mr-2">error</mat-icon>
+        <span class="text-red-800">{{ error }}</span>
+        <button mat-icon-button (click)="error = null" class="ml-auto">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="loading" class="text-center py-12">
+      <mat-spinner diameter="50" class="mx-auto mb-4"></mat-spinner>
+      <p class="text-gray-600">Cargando outfits...</p>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!loading && outfits.length === 0" class="text-center py-16">
+      <mat-icon class="text-8xl text-gray-300 mb-6">checkroom</mat-icon>
+      <h3 class="text-2xl font-semibold text-gray-700 mb-4">No tienes outfits aún</h3>
+      <p class="text-gray-500 mb-6 max-w-md mx-auto">
+        Comienza creando tu primer outfit describiendo el tipo de combinación que quieres
+      </p>
+      <button 
+        mat-raised-button 
+        color="primary"
+        (click)="focusTextarea()"
+      >
+        <mat-icon class="mr-2">add</mat-icon>
+        Crear mi primer outfit
+      </button>
+    </div>
+
+    <!-- Carrusel de outfits -->
+    <div *ngIf="!loading && outfits.length > 0" class="relative" (window:resize)="onResize()">
+      
+      <!-- Controles del carrusel -->
+      <div class="flex items-center gap-4 mb-6">
+        <button 
+          mat-icon-button 
+          class="flex-shrink-0 w-12 h-12 bg-white shadow-md hover:shadow-lg transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"
+          [disabled]="!canGoPrev"
+          (click)="prevSlide()"
+        >
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        
+        <div class="flex-1 overflow-hidden rounded-xl shadow-lg bg-white p-6">
+          <div class="flex transition-transform duration-500 ease-out gap-6"
+               [style.transform]="'translateX(-' + (currentIndex * (100 / itemsPerView)) + '%)'">
+            
+            <mat-card 
+              *ngFor="let outfit of outfits; trackBy: trackByOutfit" 
+              class="flex-shrink-0 max-w-[400px] transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+              [ngClass]="{
+                'w-full': itemsPerView === 1,
+                'w-[calc(50%-12px)]': itemsPerView === 2,
+                'w-[calc(33.333%-16px)]': itemsPerView === 3
+              }"
+            >
+              <mat-card-header class="relative pb-4">
+                <div class="flex items-start justify-between w-full">
+                  <div>
+                    <mat-card-title class="text-lg">Outfit #{{outfit.id}}</mat-card-title>
+                    <mat-card-subtitle>{{outfit.outfit.length}} prendas</mat-card-subtitle>
+                  </div>
+                  <button 
+                    mat-icon-button 
+                    (click)="onToggleFavorite(outfit)" 
+                    class="bg-gray-50 hover:bg-gray-100 transition-colors"
+                  >
+                    <mat-icon [ngClass]="{'text-pink-600': outfit.favorite, 'text-gray-400': !outfit.favorite}">
+                      {{outfit.favorite ? 'favorite' : 'favorite_border'}}
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-card-header>
+
+              <mat-card-content class="pb-4">
+                <!-- Grid de imágenes de prendas -->
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                  <div 
+                    *ngFor="let prenda of outfit.outfit.slice(0, 4); let i = index" 
+                    class="relative group cursor-pointer"
+                    (click)="onViewOutfitDetails(outfit)"
+                  >
+                    <img 
+                      [src]="prenda.urlFoto" 
+                      [alt]="prenda.tipo"
+                      class="w-full h-24 object-cover rounded-lg transition-transform group-hover:scale-105"
+                    >
+                    <div *ngIf="i === 3 && outfit.outfit.length > 4" 
+                         class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center rounded-lg">
+                      <span class="text-white text-sm font-bold">+{{outfit.outfit.length - 4}}</span>
+                    </div>
+                    
+                    <!-- Overlay con información de la prenda -->
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 rounded-lg flex items-end">
+                      <div class="p-2 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div class="font-semibold">{{prenda.tipo}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Chips de tipos y colores -->
+                <div class="space-y-2">
+                  <div class="flex flex-wrap gap-1">
+                    <mat-chip 
+                      *ngFor="let type of getOutfitTypes(outfit)" 
+                      class="text-xs"
+                    >
+                      {{type}}
+                    </mat-chip>
+                  </div>
+                  <div class="flex flex-wrap gap-1">
+                    <span 
+                      *ngFor="let color of getOutfitColors(outfit)" 
+                      class="inline-block w-4 h-4 rounded-full border border-gray-300"
+                      [style.background-color]="color"
+                      [title]="color"
+                    ></span>
+                  </div>
+                </div>
+              </mat-card-content>
+
+              <mat-card-actions class="flex justify-between pt-0">
+                <div class="flex gap-1">
+                  <button 
+                    mat-button 
+                    (click)="onViewOutfitDetails(outfit)"
+                    class="text-blue-600"
+                  >
+                    <mat-icon class="mr-1">visibility</mat-icon>
+                    Ver
+                  </button>
+                  <button 
+                    mat-button 
+                    (click)="onEditOutfit(outfit)"
+                    class="text-green-600"
+                  >
+                    <mat-icon class="mr-1">edit</mat-icon>
+                    Editar
+                  </button>
+                </div>
+                <button 
+                  mat-button 
+                  color="warn" 
+                  (click)="onDeleteOutfit(outfit)"
+                >
+                  <mat-icon class="mr-1">delete</mat-icon>
+                  Eliminar
+                </button>
+              </mat-card-actions>
+            </mat-card>
+            
+          </div>
+        </div>
+        
+        <button 
+          mat-icon-button 
+          class="flex-shrink-0 w-12 h-12 bg-white shadow-md hover:shadow-lg transition-all duration-300 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-110"
+          [disabled]="!canGoNext"
+          (click)="nextSlide()"
+        >
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+      
+      <!-- Indicadores de posición -->
+      <div class="flex justify-center gap-2 mt-6" *ngIf="outfits.length > itemsPerView">
+        <button 
+          *ngFor="let slide of [].constructor(totalSlides); let i = index"
+          class="w-3 h-3 rounded-full border-0 transition-all duration-300 cursor-pointer"
+          [ngClass]="{
+            'bg-blue-500 transform scale-110': i === (currentSlide - 1),
+            'bg-gray-300 hover:bg-gray-400': i !== (currentSlide - 1)
+          }"
+          (click)="goToSlide(i * itemsPerView)"
+        ></button>
+      </div>
+      
+      <!-- Contador de elementos -->
+      <div class="text-center mt-4 text-sm text-gray-600">
+        Mostrando {{currentIndex + 1}}-{{Math.min(currentIndex + itemsPerView, outfits.length)}} 
+        de {{outfits.length}} outfits
+      </div>
+      
+    </div>
+
+  </div>
+</div>

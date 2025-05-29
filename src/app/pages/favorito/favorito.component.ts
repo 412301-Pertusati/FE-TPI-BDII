@@ -1,141 +1,261 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
-
-interface PrendaDTO {
-  id: number;
-  nombre: string;
-  categoria: string;
-  color: string;
-  imagen: string;
-  temporada: string[];
-  notas?: string;
-  favorito: boolean;
-}
-
-interface OutfitDTO {
-  id: number;
-  nombre: string;
-  ocasion: string;
-  imagen: string;
-  temporada: string[];
-  notas?: string;
-  favorito: boolean;
-}
+import { Component, type OnInit } from "@angular/core"
+import { CommonModule } from "@angular/common"
+import { MatTabsModule } from "@angular/material/tabs"
+import { MatCardModule } from "@angular/material/card"
+import { MatIconModule } from "@angular/material/icon"
+import { MatButtonModule } from "@angular/material/button"
+import { MatChipsModule } from "@angular/material/chips"
+import  { PrendaService } from "../../core/services/prenda.service"
+import  { OutfitService } from "../../core/services/outfit.service"
+import type { Prenda } from "../../core/models/prenda.model"
+import type { Outfit } from "../../core/models/outfit.model"
 
 @Component({
-  selector: 'app-favoritos',
+  selector: "app-favoritos",
   standalone: true,
-  imports: [
-    CommonModule,
-    MatTabsModule,
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule,
-    MatChipsModule
-  ],
+  imports: [CommonModule, MatTabsModule, MatCardModule, MatIconModule, MatButtonModule, MatChipsModule],
   templateUrl: "./favorito.component.html",
   styleUrls: ["./favorito.component.css"],
 })
 export class FavoritoComponent implements OnInit {
-  prendasFavoritas: PrendaDTO[] = [];
-  outfitsFavoritos: OutfitDTO[] = [];
-  selectedTabIndex = 0;
+  prendasFavoritas: Prenda[] = []
+  outfitsFavoritos: Outfit[] = []
+  selectedTabIndex = 0
+
+  // Propiedades del carrusel para prendas
+  currentIndexPrendas = 0
+  itemsPerViewPrendas = 3
+  maxIndexPrendas = 0
+
+  // Propiedades del carrusel para outfits
+  currentIndexOutfits = 0
+  itemsPerViewOutfits = 3
+  maxIndexOutfits = 0
+
+  Math = Math
+
+  constructor(
+    private prendaService: PrendaService,
+    private outfitService: OutfitService,
+  ) {}
 
   ngOnInit() {
-    this.loadFavoritos();
+    this.getClothesFavorites()
+    this.getOutfitFavorites()
+    this.updateItemsPerView()
   }
 
-  loadFavoritos() {
-    // Aquí cargarías los datos desde tu servicio
-    // Por ahora, datos de ejemplo
-    this.prendasFavoritas = [
-      {
-        id: 1,
-        nombre: 'Camisa blanca',
-        categoria: 'Camisas',
-        color: 'Blanco',
-        imagen: '/placeholder.svg?height=200&width=300',
-        temporada: ['Primavera', 'Verano'],
-        favorito: true
+  getClothesFavorites() {
+    this.prendaService.getClothes().subscribe({
+      next: (data) => {
+        this.prendasFavoritas = data.filter((prenda) => prenda.favorite)
+        this.updateMaxIndexPrendas()
       },
-      {
-        id: 2,
-        nombre: 'Jeans azules',
-        categoria: 'Pantalones',
-        color: 'Azul',
-        imagen: '/placeholder.svg?height=200&width=300',
-        temporada: ['Otoño', 'Invierno'],
-        favorito: true
-      },
-      {
-        id: 3,
-        nombre: 'Vestido negro',
-        categoria: 'Vestidos',
-        color: 'Negro',
-        imagen: '/placeholder.svg?height=200&width=300',
-        temporada: ['Primavera', 'Otoño'],
-        favorito: true
-      }
-    ];
-
-    this.outfitsFavoritos = [
-      {
-        id: 1,
-        nombre: 'Look casual',
-        ocasion: 'Casual',
-        imagen: '/placeholder.svg?height=200&width=300',
-        temporada: ['Primavera'],
-        favorito: true
-      }
-    ];
+      error: (error) => console.log(error),
+    })
   }
 
+  getOutfitFavorites() {
+    this.outfitService.getOutfitsByUser().subscribe({
+      next: (data) => {
+        this.outfitsFavoritos = data.filter((outfit) => outfit.favorite)
+        this.updateMaxIndexOutfits()
+      },
+      error: (error) => console.log(error),
+    })
+  }
+
+  // Métodos del carrusel para prendas
+  updateMaxIndexPrendas() {
+    this.maxIndexPrendas = Math.max(0, this.prendasFavoritas.length - this.itemsPerViewPrendas)
+  }
+
+  nextSlidePrendas() {
+    if (this.currentIndexPrendas < this.maxIndexPrendas) {
+      this.currentIndexPrendas++
+    }
+  }
+
+  prevSlidePrendas() {
+    if (this.currentIndexPrendas > 0) {
+      this.currentIndexPrendas--
+    }
+  }
+
+  goToSlidePrendas(index: number) {
+    this.currentIndexPrendas = Math.max(0, Math.min(index, this.maxIndexPrendas))
+  }
+
+  get canGoPrevPrendas() {
+    return this.currentIndexPrendas > 0
+  }
+
+  get canGoNextPrendas() {
+    return this.currentIndexPrendas < this.maxIndexPrendas
+  }
+
+  get totalSlidesPrendas() {
+    return Math.ceil(this.prendasFavoritas.length / this.itemsPerViewPrendas)
+  }
+
+  get currentSlidePrendas() {
+    return Math.floor(this.currentIndexPrendas / this.itemsPerViewPrendas) + 1
+  }
+
+  // Métodos del carrusel para outfits
+  updateMaxIndexOutfits() {
+    this.maxIndexOutfits = Math.max(0, this.outfitsFavoritos.length - this.itemsPerViewOutfits)
+  }
+
+  nextSlideOutfits() {
+    if (this.currentIndexOutfits < this.maxIndexOutfits) {
+      this.currentIndexOutfits++
+    }
+  }
+
+  prevSlideOutfits() {
+    if (this.currentIndexOutfits > 0) {
+      this.currentIndexOutfits--
+    }
+  }
+
+  goToSlideOutfits(index: number) {
+    this.currentIndexOutfits = Math.max(0, Math.min(index, this.maxIndexOutfits))
+  }
+
+  get canGoPrevOutfits() {
+    return this.currentIndexOutfits > 0
+  }
+
+  get canGoNextOutfits() {
+    return this.currentIndexOutfits < this.maxIndexOutfits
+  }
+
+  get totalSlidesOutfits() {
+    return Math.ceil(this.outfitsFavoritos.length / this.itemsPerViewOutfits)
+  }
+
+  get currentSlideOutfits() {
+    return Math.floor(this.currentIndexOutfits / this.itemsPerViewOutfits) + 1
+  }
+
+  // Método responsive compartido
+  updateItemsPerView() {
+    const width = window.innerWidth
+    if (width < 768) {
+      this.itemsPerViewPrendas = 1
+      this.itemsPerViewOutfits = 1
+    } else if (width < 1024) {
+      this.itemsPerViewPrendas = 2
+      this.itemsPerViewOutfits = 2
+    } else {
+      this.itemsPerViewPrendas = 3
+      this.itemsPerViewOutfits = 3
+    }
+    this.updateMaxIndexPrendas()
+    this.updateMaxIndexOutfits()
+  }
+
+  onResize() {
+    this.updateItemsPerView()
+  }
+
+  trackByPrenda(index: number, prenda: Prenda): string {
+    return prenda.id
+  }
+
+  trackByOutfit(index: number, outfit: Outfit): string {
+    return outfit.id
+  }
+
+  // Tus métodos originales
   onTabChange(event: any) {
-    this.selectedTabIndex = event.index;
+    this.selectedTabIndex = event.index
+    // Resetear índices del carrusel al cambiar de tab
+    this.currentIndexPrendas = 0
+    this.currentIndexOutfits = 0
   }
 
-  onToggleFavoritoPrenda(prenda: PrendaDTO) {
-    prenda.favorito = !prenda.favorito;
-    if (!prenda.favorito) {
-      // Remover de favoritos
-      this.prendasFavoritas = this.prendasFavoritas.filter(p => p.id !== prenda.id);
-    }
-    // Aquí llamarías a tu servicio para actualizar el estado
+  onToggleFavoritoPrenda(prenda: Prenda) {
+    this.prendaService.changeFavorite(prenda.id).subscribe({
+      next: (updatedPrenda) => {
+        // Actualizar la prenda en el array
+        const index = this.prendasFavoritas.findIndex((p) => p.id === prenda.id)
+        if (index !== -1) {
+          if (updatedPrenda.favorite) {
+            this.prendasFavoritas[index] = updatedPrenda
+          } else {
+            // Remover de favoritos
+            this.prendasFavoritas.splice(index, 1)
+            this.updateMaxIndexPrendas()
+            // Ajustar índice si es necesario
+            if (this.currentIndexPrendas > this.maxIndexPrendas) {
+              this.currentIndexPrendas = this.maxIndexPrendas
+            }
+          }
+        }
+      },
+      error: (error) => console.log("Error al cambiar favorito:", error),
+    })
   }
 
-  onToggleFavoritoOutfit(outfit: OutfitDTO) {
-    outfit.favorito = !outfit.favorito;
-    if (!outfit.favorito) {
-      // Remover de favoritos
-      this.outfitsFavoritos = this.outfitsFavoritos.filter(o => o.id !== outfit.id);
-    }
-    // Aquí llamarías a tu servicio para actualizar el estado
+  onToggleFavoritoOutfit(outfit: Outfit) {
+    this.outfitService.changeFavoriteOutfit(outfit.id).subscribe({
+      next: (updatedOutfit) => {
+        const index = this.outfitsFavoritos.findIndex((o) => o.id === outfit.id)
+        if (index !== -1) {
+          if (updatedOutfit.favorite) {
+            this.outfitsFavoritos[index] = updatedOutfit
+          } else {
+            // Remover de favoritos
+            this.outfitsFavoritos.splice(index, 1)
+            this.updateMaxIndexOutfits()
+            // Ajustar índice si es necesario
+            if (this.currentIndexOutfits > this.maxIndexOutfits) {
+              this.currentIndexOutfits = this.maxIndexOutfits
+            }
+          }
+        }
+      },
+      error: (error) => console.log("Error al cambiar favorito:", error),
+    })
   }
 
-  onEditarPrenda(prenda: PrendaDTO) {
-    console.log('Editar prenda:', prenda);
+  onEditarPrenda(prenda: Prenda) {
+    console.log("Editar prenda:", prenda)
     // Implementar lógica de edición
   }
 
-  onEliminarPrenda(prenda: PrendaDTO) {
-    console.log('Eliminar prenda:', prenda);
-    this.prendasFavoritas = this.prendasFavoritas.filter(p => p.id !== prenda.id);
+  onEliminarPrenda(prenda: Prenda) {
+    console.log("Eliminar prenda:", prenda)
+    const index = this.prendasFavoritas.findIndex((p) => p.id === prenda.id)
+    if (index !== -1) {
+      this.prendasFavoritas.splice(index, 1)
+      this.updateMaxIndexPrendas()
+      // Ajustar índice si es necesario
+      if (this.currentIndexPrendas > this.maxIndexPrendas) {
+        this.currentIndexPrendas = this.maxIndexPrendas
+      }
+    }
     // Aquí llamarías a tu servicio para eliminar
   }
 
-  onEditarOutfit(outfit: OutfitDTO) {
-    console.log('Editar outfit:', outfit);
+  onEditarOutfit(outfit: Outfit) {
+    console.log("Editar outfit:", outfit)
     // Implementar lógica de edición
   }
 
-  onEliminarOutfit(outfit: OutfitDTO) {
-    console.log('Eliminar outfit:', outfit);
-    this.outfitsFavoritos = this.outfitsFavoritos.filter(o => o.id !== outfit.id);
+  onEliminarOutfit(outfit: Outfit) {
+    console.log("Eliminar outfit:", outfit)
+    const index = this.outfitsFavoritos.findIndex((o) => o.id === outfit.id)
+    if (index !== -1) {
+      this.outfitsFavoritos.splice(index, 1)
+      this.updateMaxIndexOutfits()
+      // Ajustar índice si es necesario
+      if (this.currentIndexOutfits > this.maxIndexOutfits) {
+        this.currentIndexOutfits = this.maxIndexOutfits
+      }
+    }
     // Aquí llamarías a tu servicio para eliminar
   }
 }
